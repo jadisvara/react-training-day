@@ -32,6 +32,7 @@ const routeConfig = [
             require('./containers/MainPage'),
             require('./containers/Counter'),
             require('./containers/Users'),
+            require('./containers/Admin'),
         ],
     },
 ];

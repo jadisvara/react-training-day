@@ -1,7 +1,7 @@
 import $http from 'axios';
 
 export function usersList(params = {}) {
-    const { _start = 0, _limit = 10 } = params;
+    const { _start = 0, _limit = 15 } = params;
     return $http({ url: `users?_start=${_start}&_limit=${_limit}` });
 }
 

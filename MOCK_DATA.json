@@ -997,4 +997,10 @@
 {"id":997,"first_name":"Doris","last_name":"Snyder","email":"dsnyderro@cornell.edu","gender":"Female","ip_address":"253.245.162.24","avatar":"https://robohash.org/dolorevoluptasquo.png?size=100x100","latitude":"52.70031","longitude":"-6.96181","color":"#85dde5","city":"Bagenalstown","country":"Ireland"},
 {"id":998,"first_name":"Harold","last_name":"Nguyen","email":"hnguyenrp@nps.gov","gender":"Male","ip_address":"122.200.166.207","avatar":"https://robohash.org/doloresquodid.png?size=100x100","latitude":"-26.11139","longitude":"-49.80528","color":"#5d77c2","city":"Mafra","country":"Brazil"},
 {"id":999,"first_name":"Ernest","last_name":"Dean","email":"edeanrq@thetimes.co.uk","gender":"Male","ip_address":"68.123.11.73","avatar":"https://robohash.org/dictaillumsit.png?size=100x100","latitude":"31.19049","longitude":"115.36038","color":"#146948","city":"Muzidian","country":"China"},
-{"id":1000,"first_name":"Beverly","last_name":"Jackson","email":"bjacksonrr@nationalgeographic.com","gender":"Female","ip_address":"182.66.43.74","avatar":"https://robohash.org/ducimusutquia.png?size=100x100","latitude":"48.13219","longitude":"30.08247","color":"#f84454","city":"Savran’","country":"Ukraine"}]}
+{"id":1000,"first_name":"Beverly","last_name":"Jackson","email":"bjacksonrr@nationalgeographic.com","gender":"Female","ip_address":"182.66.43.74","avatar":"https://robohash.org/ducimusutquia.png?size=100x100","latitude":"48.13219","longitude":"30.08247","color":"#f84454","city":"Savran’","country":"Ukraine"}],
+"questions": [
+  {"id": 1, "text": "How many Vogons does it take to change a lightbulb?"},
+  {"id": 2, "text": "How many roads must a man walk down?"},
+  {"id": 3, "text": "What do you get if you multiply six by nine?"},
+  {"id": 4, "text": "Answer to the Ultimate Question of Life, the Universe, and Everything?"}
+]}
