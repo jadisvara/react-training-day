@@ -10,9 +10,10 @@ class AddQuestion extends Component {
    this.handleRuTextChange = this.handleRuTextChange.bind(this);
    this.add = this.add.bind(this);
    this.selectTag = this.selectTag.bind(this);
+  const { questionToEdit } = undefined;
    this.state = {
-     engText: '',
-     ruText: '',
+     engText: questionToEdit ? questionToEdit.eng_text : '',
+     ruText: questionToEdit ? questionToEdit.rus_text : '',
      selectedTags: [],
    };
   }
@@ -84,5 +85,6 @@ class AddQuestion extends Component {
 AddQuestion.propTypes = {
   tags: PropTypes.array.isRequired,
   save: PropTypes.func.isRequired,
+  // questionToEdit: PropTypes.object.isRequired,
 };
 module.exports = AddQuestion;

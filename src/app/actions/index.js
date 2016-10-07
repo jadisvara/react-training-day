@@ -6,6 +6,7 @@ import {
   saveQuestion as saveQuestionApi,
   removeQuestion as removeQuestionApi,
   updateQuestion as updateQuestionApi,
+  questionById as questionByIdApi,
 } from '../resources/questions';
 
 export const increment = () => ({ type: ActionType.INCREMENT });
@@ -22,6 +23,15 @@ export const getUsers = () => dispatch => {
 
 export const getQuestions = () => dispatch => {
     questionListApi().then(response => {
+      dispatch({
+          type: ActionType.SET_QUESTIONS,
+          payload: response.data,
+      });
+    });
+};
+
+export const getQuestion = (id) => dispatch => {
+    questionByIdApi(id).then(response => {
       dispatch({
           type: ActionType.SET_QUESTIONS,
           payload: response.data,
@@ -58,10 +68,10 @@ export const updateQuestion = (data) => dispatch => {
 
 export const removeQuestion = (id) => dispatch => {
     console.log('removeQuestion', id);
-    removeQuestionApi(id).then(response => {
+    removeQuestionApi(id).then(() => {
       dispatch({
           type: ActionType.REMOVE_QUESTION,
-          payload: response.data,
+          payload: id,
       });
     });
 };

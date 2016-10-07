@@ -20,13 +20,17 @@ class Question extends Component {
       return (
           <ListGroupItem>
               #{this.props.id} {this.props.engText} / {this.props.ruText}
-              {this.props.tags.map(tag => (
-                  <Button
-                      bsSize="xsmall"
-                  >
-                      '#'{tag.tag}
-                  </Button>
-              ))}
+              {this.props.tags
+                ? this.props.tags.map(tag => (
+                    <Button
+                        bsSize="xsmall"
+                        key={tag.id}
+                    >
+                        '#'{tag.tag}
+                    </Button>
+              ))
+                : ''
+              }
               <Button
                   bsStyle="danger"
                   bsSize="xsmall"

@@ -13,6 +13,9 @@ class Questions extends Component {
     super(props);
     this.openAddQuestionModal = this.openAddQuestionModal.bind(this);
     this.closeAddQuestionModal = this.closeAddQuestionModal.bind(this);
+    this.deleteQuestion = this.deleteQuestion.bind(this);
+    this.saveQuestion = this.saveQuestion.bind(this);
+    this.updateQuestion = this.updateQuestion.bind(this);
     this.state = {
       showModal: false,
     };
@@ -35,6 +38,24 @@ class Questions extends Component {
     this.setState({ showModal: false });
   }
 
+  deleteQuestion(id) {
+      this.props.removeQuestion(id);
+  }
+
+  saveQuestion(data) {
+      this.props.saveQuestion(data);
+  }
+
+  updateQuestion() {
+      // this.props.getQuestion(id);
+      // const q = this.props.questions.filter(item => item.id === id)[0];
+      // this.setState({
+      //   showModal: true,
+      //   question: q,
+      // });
+      // this.props.updateQuestion(data);
+  }
+
   render() {
     const { questions } = this.props;
     const { tags } = this.props;
@@ -48,8 +69,8 @@ class Questions extends Component {
             <h3>Questions:</h3>
             <QuestionList
                 data={questions}
-                remove={this.props.removeQuestion}
-                update={this.props.updateQuestion}
+                remove={this.deleteQuestion}
+                update={this.updateQuestion}
             />
 
             <Modal show={showModal}>
@@ -57,7 +78,10 @@ class Questions extends Component {
                     <Modal.Title>Add new Question</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <AddQuestion tags={tags} save={this.props.saveQuestion}/>
+                    <AddQuestion
+                        tags={tags}
+                        save={this.saveQuestion}
+                    />
                 </Modal.Body>
                 <Modal.Footer>
                     <Button onClick={this.closeAddQuestionModal}>Close</Button>
@@ -86,6 +110,7 @@ module.exports = connect(
     getQuestions: () => dispatch(QuestionsActions.getQuestions()),
     getTags: () => dispatch(QuestionsActions.getTags()),
     removeQuestion: (id) => dispatch(QuestionsActions.removeQuestion(id)),
+    getQuestion: (id) => dispatch(QuestionsActions.getQuestion(id)),
     updateQuestion: (data) => dispatch(QuestionsActions.updateQuestion(data)),
     saveQuestion: (data) => dispatch(QuestionsActions.saveQuestion(data)),
   })
