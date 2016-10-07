@@ -9,6 +9,7 @@ const ActionType = {
     REMOVE_QUESTION: 8,
     UPDATE_QUESTION: 9,
     GET_QUESTION: 10,
+    SEARCH_QUESTION: 11,
 };
 
 export default ActionType;

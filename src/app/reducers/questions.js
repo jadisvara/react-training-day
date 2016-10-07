@@ -3,6 +3,7 @@ import ActionTypes from '../constants/ActionTypes';
 const INITIAL_STATE = {
     questions: [],
     question: {},
+    searchQuestions: [],
 };
 
 const QuestionsReducer = (state = INITIAL_STATE,
@@ -22,8 +23,16 @@ const QuestionsReducer = (state = INITIAL_STATE,
               questions: (state.questions.filter((question) => question.id !== action.payload)),
             };
         case ActionTypes.UPDATE_QUESTION:
-            console.log('action.payload', action.payload);
             return { ...state, questions: [...state.questions, action.payload] };
+        case ActionTypes.SEARCH_QUESTION:
+        return {
+          ...state,
+          searchQuestions: (
+            state.questions.filter((question) =>
+              question.eng_text.includes(action.payload)
+              || question.rus_text.includes(action.payload))
+          ),
+        };
         default:
             return state;
     }

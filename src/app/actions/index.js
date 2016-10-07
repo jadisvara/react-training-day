@@ -76,6 +76,8 @@ export const removeQuestion = (id) => dispatch => {
     });
 };
 
+export const searchQuestion = (text) => ({ type: ActionType.SEARCH_QUESTION, payload: text });
+
 export const getTags = () => dispatch => {
   console.log('getTags');
     tagListApi().then(response => {

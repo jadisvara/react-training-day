@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Panel from 'react-bootstrap/lib/Panel';
-import Button from 'react-bootstrap/lib/Button';
-import Modal from 'react-bootstrap/lib/Modal';
+// import Panel from 'react-bootstrap/lib/Panel';
+// import Button from 'react-bootstrap/lib/Button';
+// import Modal from 'react-bootstrap/lib/Modal';
+import { ControlLabel, FormControl, FormGroup, Button, Panel, Modal } from 'react-bootstrap';
 import QuestionList from '../../../components/QuestionList';
 import AddQuestion from '../../../components/AddQuestion';
 // import { getQuestions, getTags, removeQuestion, updateQuestion } from '../../../actions';
@@ -16,8 +17,11 @@ class Questions extends Component {
     this.deleteQuestion = this.deleteQuestion.bind(this);
     this.saveQuestion = this.saveQuestion.bind(this);
     this.updateQuestion = this.updateQuestion.bind(this);
+    this.handleSearchChange = this.handleSearchChange.bind(this);
     this.state = {
       showModal: false,
+      searchText: '',
+      searchQuestions: [],
     };
   }
 
@@ -56,16 +60,55 @@ class Questions extends Component {
       // this.props.updateQuestion(data);
   }
 
+  handleSearchChange(e) {
+    const self = this;
+    const text = e.target.value.trim().toLowerCase();
+    if (text === '') {
+        this.setState({
+            searchText: text,
+            searchQuestions: [],
+       });
+    } else {
+        this.setState({
+            searchText: text,
+            searchQuestions: self.props.questions.filter((question) =>
+              question.eng_text.toLowerCase().includes(text)
+              || question.rus_text.toLowerCase().includes(text)),
+        });
+       // this.props.searchQuestion(e.target.value);
+       console.log('this.state.searchQuestions', this.state.searchQuestions);
+    }
+  }
+
   render() {
     const { questions } = this.props;
     const { tags } = this.props;
-    const { showModal } = this.state;
+    const { showModal, searchQuestions } = this.state;
 
     return (
         <Panel>
             <Button bsStyle="primary" onClick={this.openAddQuestionModal}>
             Add Question
             </Button>
+            <FormGroup controlId="questionSearch">
+                <ControlLabel>
+                    <h3>Search:</h3>
+                </ControlLabel>
+                <FormControl
+                    type="text"
+                    value={this.state.searchText}
+                    placeholder="Search for..."
+                    onChange={this.handleSearchChange}
+                />
+                {searchQuestions
+                    ? <QuestionList
+                        data={searchQuestions}
+                        remove={this.deleteQuestion}
+                        update={this.updateQuestion}
+                    />
+                    : ''
+                }
+            </FormGroup>
             <h3>Questions:</h3>
             <QuestionList
                 data={questions}
@@ -100,10 +143,14 @@ Questions.propTypes = {
   removeQuestion: PropTypes.func.isRequired,
   updateQuestion: PropTypes.func.isRequired,
   saveQuestion: PropTypes.func.isRequired,
+  searchQuestion: PropTypes.func.isRequired,
+  // searchQuestions: PropTypes.array,
 };
+
 module.exports = connect(
   state => ({
     questions: state.questions.questions,
+    // searchQuestions: state.searchQuestions ? state.searchQuestions.searchQuestions : [],
     tags: state.tags.tags,
   }),
   dispatch => ({
@@ -113,5 +160,6 @@ module.exports = connect(
     getQuestion: (id) => dispatch(QuestionsActions.getQuestion(id)),
     updateQuestion: (data) => dispatch(QuestionsActions.updateQuestion(data)),
     saveQuestion: (data) => dispatch(QuestionsActions.saveQuestion(data)),
+    searchQuestion: (text) => dispatch(QuestionsActions.searchQuestion(text)),
   })
 )(Questions);
