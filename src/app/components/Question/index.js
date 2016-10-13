@@ -35,8 +35,7 @@ class Question extends Component {
               onMouseEnter={() => this.onMouseEnter()}
               onMouseLeave={() => this.onMouseLeave()}
           >
-              #{data.id}
-              {this.props.isEng ? data.eng_text : data.rus_text}
+              #{data.id} {this.props.isEng ? data.eng_text : data.rus_text}
               {data.tags
                 ? data.tags.map(tag => (
                     <Button

@@ -13,7 +13,6 @@ class AddQuestion extends Component {
    this.selectTag = this.selectTag.bind(this);
    const question = this.props.questionToEdit || null;
    const tags = question ? question.tags.map(t => t.tag) : [];
-   console.log('--tags', tags);
    this.state = {
      engText: question ? question.eng_text : '',
      ruText: question ? question.rus_text : '',
