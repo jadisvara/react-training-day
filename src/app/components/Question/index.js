@@ -10,19 +10,15 @@ class Question extends Component {
         showBtns: false,
       };
     }
-
     componentWillMount() {
       console.log('Question');
     }
-
     onDelete(e, id) {
         this.props.remove(id);
     }
-
     onEdit(e, id) {
         this.props.update(id);
     }
-
     onMouseEnter() {
         this.setState({ showBtns: true });
     }
@@ -32,15 +28,17 @@ class Question extends Component {
 
     render() {
       const { showBtns } = this.state;
+      const { data } = this.props;
 
       return (
           <ListGroupItem
               onMouseEnter={() => this.onMouseEnter()}
               onMouseLeave={() => this.onMouseLeave()}
           >
-              #{this.props.id} {this.props.engText} / {this.props.ruText}
-              {this.props.tags
-                ? this.props.tags.map(tag => (
+              #{data.id}
+              {this.props.isEng ? data.eng_text : data.rus_text}
+              {data.tags
+                ? data.tags.map(tag => (
                     <Button
                         bsSize="xsmall"
                         key={tag.id}
@@ -48,7 +46,7 @@ class Question extends Component {
                         #{tag.tag}
                     </Button>
               ))
-                : ''
+                : null
               }
               {showBtns
                 ?
@@ -57,7 +55,7 @@ class Question extends Component {
                           bsStyle="danger"
                           bsSize="xsmall"
                           style={{ float: 'right' }}
-                          onClick={e => this.onDelete(e, this.props.id)}
+                          onClick={e => this.onDelete(e, data.id)}
                       >
                           Delete
                       </Button>
@@ -66,7 +64,7 @@ class Question extends Component {
                           bsStyle="warning"
                           bsSize="xsmall"
                           style={{ float: 'right', marginRight: '10px' }}
-                          onClick={e => this.onEdit(e, this.props.id)}
+                          onClick={e => this.onEdit(e, data.id)}
                       >
                           Edit
                       </Button>
@@ -78,12 +76,10 @@ class Question extends Component {
     }
 }
 Question.propTypes = {
-  engText: PropTypes.string.isRequired,
-  ruText: PropTypes.string.isRequired,
-  tags: PropTypes.array.isRequired,
-  id: PropTypes.number.isRequired,
+  data: PropTypes.object.isRequired,
   remove: PropTypes.func.isRequired,
   update: PropTypes.func.isRequired,
+  isEng: PropTypes.bool.isRequired,
 };
 
 module.exports = Question;

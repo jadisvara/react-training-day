@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { ControlLabel, FormControl, FormGroup, Button, Panel,
-   Modal, ButtonToolbar } from 'react-bootstrap';
+   Modal } from 'react-bootstrap';
 import QuestionList from '../../../components/QuestionList';
 import AddQuestion from '../../../components/AddQuestion';
 // import { getQuestions, getTags, removeQuestion, updateQuestion } from '../../../actions';
@@ -81,8 +81,7 @@ class Questions extends Component {
   }
 
   render() {
-    const { questions } = this.props;
-    const { tags } = this.props;
+    const { questions, tags } = this.props;
     const { showModal, searchQuestions, questionToEdit } = this.state;
 
     return (
@@ -105,25 +104,25 @@ class Questions extends Component {
                         data={searchQuestions}
                         remove={this.deleteQuestion}
                         update={this.openEditQuestionModal}
+                        isEng={this.state.isEng}
                     />
                     : ''
                 }
             </FormGroup>
             <h3>Questions:</h3>
-            <ButtonToolbar>
-                <Button
-                    onClick={() => this.setState({ isEng: !this.state.isEng })}
-                >
-                  {this.state.isEng
-                      ? "ru"
-                      : "eng"
-                  }
-                </Button>
-            </ButtonToolbar>
+            <Button
+                onClick={() => this.setState({ isEng: !this.state.isEng })}
+            >
+              {this.state.isEng
+                  ? 'ru'
+                  : 'eng'
+              }
+            </Button>
             <QuestionList
                 data={questions}
                 remove={this.deleteQuestion}
                 update={this.openEditQuestionModal}
+                isEng={this.state.isEng}
             />
 
             <Modal show={showModal}>
