@@ -1,5 +1,10 @@
 import React, { PropTypes, Component } from 'react';
+import injectTapEventPlugin from 'react-tap-event-plugin';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
+// Needed for onTouchTap
+// http://stackoverflow.com/a/34015469/988941
+injectTapEventPlugin();
 
 // rendered once, when app started, never will be unmount
 class AppWrapper extends Component {
@@ -12,17 +17,9 @@ class AppWrapper extends Component {
         const { children } = this.props;
 
         return (
-            <div>
-                <header>
-                    site header
-                </header>
-                <main>
-                    { children }
-                </main>
-                <footer>
-                    site footer
-                </footer>
-            </div>
+            <MuiThemeProvider>
+                { children }
+            </MuiThemeProvider>
         );
     }
 }

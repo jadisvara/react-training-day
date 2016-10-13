@@ -1,7 +1,25 @@
 import React, { PropTypes, Component } from 'react';
-import { ListGroupItem, Button } from 'react-bootstrap';
-// import { connect } from 'react-redux';
-// import { removeQuestion } from '../../actions';
+// import { Button } from 'react-bootstrap';
+import { ListItem } from 'material-ui/List';
+// import Checkbox from 'material-ui/Checkbox';
+import Chip from 'material-ui/Chip';
+import FlatButton from 'material-ui/FlatButton';
+import { cyan500 } from 'material-ui/styles/colors';
+
+const styles = {
+  chip: {
+    margin: 4,
+    backgroundColor: cyan500,
+  },
+  wrapper: {
+    display: 'inline-flex',
+    flexWrap: 'wrap',
+    width: '30%',
+  },
+  listItem: {
+    borderBottom: '1px solid #F5F5F5', // == gray100
+  },
+};
 
 class Question extends Component {
     constructor(props) {
@@ -25,53 +43,52 @@ class Question extends Component {
     onMouseLeave() {
         this.setState({ showBtns: false });
     }
+    handleDeleteTag(id) {
+      console.log('delete Tag', id);
+    }
 
     render() {
-      const { showBtns } = this.state;
       const { data } = this.props;
 
       return (
-          <ListGroupItem
+          <ListItem
+              // leftCheckbox={<Checkbox />}
               onMouseEnter={() => this.onMouseEnter()}
               onMouseLeave={() => this.onMouseLeave()}
+              style={styles.listItem}
           >
-              #{data.id}
-              {this.props.isEng ? data.eng_text : data.rus_text}
-              {data.tags
-                ? data.tags.map(tag => (
-                    <Button
-                        bsSize="xsmall"
-                        key={tag.id}
-                    >
-                        #{tag.tag}
-                    </Button>
-              ))
-                : null
-              }
-              {showBtns
-                ?
-                  <div style={{ display: 'inline' }}>
-                      <Button
-                          bsStyle="danger"
-                          bsSize="xsmall"
-                          style={{ float: 'right' }}
-                          onClick={e => this.onDelete(e, data.id)}
-                      >
-                          Delete
-                      </Button>
-
-                      <Button
-                          bsStyle="warning"
-                          bsSize="xsmall"
-                          style={{ float: 'right', marginRight: '10px' }}
-                          onClick={e => this.onEdit(e, data.id)}
-                      >
-                          Edit
-                      </Button>
+              <div>
+                  <div style={{ width: '50%', display: 'inline-block' }}>
+                      {this.props.isEng ? data.eng_text : data.rus_text}
                   </div>
-                : ''
-              }
-          </ListGroupItem>
+                  <div style={styles.wrapper}>
+                      {data.tags &&
+                        data.tags.map(tag => (
+                            <Chip
+                                key={tag.id}
+                                style={styles.chip}
+                                onRequestDelete={() => this.handleDeleteTag(tag.id)}
+                            >
+                                {tag.tag}
+                            </Chip>
+                        ))
+                      }
+                  </div>
+                  <div style={{ width: '20%', display: 'inline-block' }}>
+                      <FlatButton
+                          label="Delete"
+                          style={{ float: 'right' }}
+                          onTouchTap={e => this.onDelete(e, data.id)}
+                      />
+                      <FlatButton
+                          label="Edit"
+                          primary
+                          style={{ float: 'right' }}
+                          onTouchTap={e => this.onEdit(e, data.id)}
+                      />
+                  </div>
+              </div>
+          </ListItem>
       );
     }
 }
@@ -83,3 +100,47 @@ Question.propTypes = {
 };
 
 module.exports = Question;
+//
+// <ListItem
+//     leftCheckbox={<Checkbox />}
+//     onMouseEnter={() => this.onMouseEnter()}
+//     onMouseLeave={() => this.onMouseLeave()}
+// >
+//     #{data.id}
+//     {this.props.isEng ? data.eng_text : data.rus_text}
+//     {data.tags
+//       ? data.tags.map(tag => (
+//           <Button
+//               bsSize="xsmall"
+//               key={tag.id}
+//           >
+//               #{tag.tag}
+//           </Button>
+//     ))
+//       : null
+//     }
+//     {showBtns
+//       ?
+//         <div style={{ display: 'inline' }}>
+//             <Button
+//                 bsStyle="danger"
+//                 bsSize="xsmall"
+//                 style={{ float: 'right' }}
+//                 onClick={e => this.onDelete(e, data.id)}
+//             >
+//                 Delete
+//             </Button>
+//
+//             <Button
+//                 bsStyle="warning"
+//                 bsSize="xsmall"
+//                 style={{ float: 'right', marginRight: '10px' }}
+//                 onClick={e => this.onEdit(e, data.id)}
+//             >
+//                 Edit
+//             </Button>
+//         </div>
+//       : ''
+//     }
+//     <Divider />
+// </ListItem>

@@ -1,10 +1,14 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { ControlLabel, FormControl, FormGroup, Button, Panel,
-   Modal } from 'react-bootstrap';
+import TextField from 'material-ui/TextField';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+import Dialog from 'material-ui/Dialog';
+import { Toolbar } from 'material-ui/Toolbar';
+import FlatButton from 'material-ui/FlatButton';
+import { FormGroup, Button } from 'react-bootstrap';
 import QuestionList from '../../../components/QuestionList';
 import AddQuestion from '../../../components/AddQuestion';
-// import { getQuestions, getTags, removeQuestion, updateQuestion } from '../../../actions';
 import * as QuestionsActions from '../../../actions';
 
 class Questions extends Component {
@@ -24,7 +28,6 @@ class Questions extends Component {
       isEng: true,
     };
   }
-
   componentWillMount() {
     if (this.props.questions.length === 0) {
         this.props.getQuestions();
@@ -33,7 +36,6 @@ class Questions extends Component {
         this.props.getTags();
     }
   }
-
   openEditQuestionModal(id) {
       const q = this.props.questions.filter(item => item.id === id)[0];
       this.setState({
@@ -41,27 +43,21 @@ class Questions extends Component {
           showModal: true,
       });
   }
-
   openAddQuestionModal() {
     this.setState({ showModal: true, questionToEdit: null });
   }
-
   closeAddQuestionModal() {
     this.setState({ showModal: false, questionToEdit: null });
   }
-
   deleteQuestion(id) {
       this.props.removeQuestion(id);
   }
-
   saveQuestion(data) {
       this.props.saveQuestion(data);
   }
-
   updateQuestion(data) {
       this.props.updateQuestion(data);
   }
-
   handleSearchChange(e) {
     const self = this;
     const text = e.target.value.trim().toLowerCase();
@@ -85,38 +81,37 @@ class Questions extends Component {
     const { showModal, searchQuestions, questionToEdit } = this.state;
 
     return (
-        <Panel>
+        <div>
+            <FloatingActionButton
+                onClick={this.openAddQuestionModal}
+            >
+                <ContentAdd />
+            </FloatingActionButton>
             <Button bsStyle="primary" onClick={this.openAddQuestionModal}>
             Add Question
             </Button>
+            <TextField
+                hintText="Enter search words"
+                floatingLabelText="Search for"
+                value={this.state.searchText}
+                onChange={this.handleSearchChange}
+                style={{ display: 'block', margin: '10px' }}
+            />
             <FormGroup controlId="questionSearch">
-                <ControlLabel>
-                    <h3>Search:</h3>
-                </ControlLabel>
-                <FormControl
-                    type="text"
-                    value={this.state.searchText}
-                    placeholder="Search for..."
-                    onChange={this.handleSearchChange}
-                />
-                {searchQuestions
-                    ? <QuestionList
+                {searchQuestions &&
+                    <QuestionList
                         data={searchQuestions}
                         remove={this.deleteQuestion}
                         update={this.openEditQuestionModal}
                         isEng={this.state.isEng}
                     />
-                    : ''
                 }
             </FormGroup>
-            <h3>Questions:</h3>
+            <Toolbar/>
             <Button
                 onClick={() => this.setState({ isEng: !this.state.isEng })}
             >
-              {this.state.isEng
-                  ? 'ru'
-                  : 'eng'
-              }
+              {this.state.isEng ? 'ru' : 'eng'}
             </Button>
             <QuestionList
                 data={questions}
@@ -124,24 +119,32 @@ class Questions extends Component {
                 update={this.openEditQuestionModal}
                 isEng={this.state.isEng}
             />
-
-            <Modal show={showModal}>
-                <Modal.Header>
-                    <Modal.Title>Add new Question</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <AddQuestion
-                        tags={tags}
-                        save={this.saveQuestion}
-                        update={this.updateQuestion}
-                        questionToEdit={questionToEdit}
-                    />
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={this.closeAddQuestionModal}>Close</Button>
-                </Modal.Footer>
-            </Modal>
-        </Panel>
+            <Dialog
+                title="Add new Question"
+                actions={[
+                    <FlatButton
+                        label="Cancel"
+                        primary
+                        onTouchTap={this.closeAddQuestionModal}
+                    />,
+                    <FlatButton
+                        label="Submit"
+                        primary
+                        onTouchTap={this.closeAddQuestionModal}
+                    />,
+                ]}
+                modal={false}
+                open={showModal}
+                onRequestClose={this.closeAddQuestionModal}
+            >
+                <AddQuestion
+                    tags={tags}
+                    save={this.saveQuestion}
+                    update={this.updateQuestion}
+                    questionToEdit={questionToEdit}
+                />
+            </Dialog>
+        </div>
     );
   }
 }
@@ -155,13 +158,11 @@ Questions.propTypes = {
   updateQuestion: PropTypes.func.isRequired,
   saveQuestion: PropTypes.func.isRequired,
   searchQuestion: PropTypes.func.isRequired,
-  // searchQuestions: PropTypes.array,
 };
 
 module.exports = connect(
   state => ({
     questions: state.questions.questions,
-    // searchQuestions: state.searchQuestions ? state.searchQuestions.searchQuestions : [],
     tags: state.tags.tags,
   }),
   dispatch => ({
@@ -174,3 +175,20 @@ module.exports = connect(
     searchQuestion: (text) => dispatch(QuestionsActions.searchQuestion(text)),
   })
 )(Questions);
+
+// <Modal show={showModal}>
+//     <Modal.Header>
+//         <Modal.Title>Add new Question</Modal.Title>
+//     </Modal.Header>
+//     <Modal.Body>
+//         <AddQuestion
+//             tags={tags}
+//             save={this.saveQuestion}
+//             update={this.updateQuestion}
+//             questionToEdit={questionToEdit}
+//         />
+//     </Modal.Body>
+//     <Modal.Footer>
+//         <Button onClick={this.closeAddQuestionModal}>Close</Button>
+//     </Modal.Footer>
+// </Modal>

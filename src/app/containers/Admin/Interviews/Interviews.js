@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import { ListGroup, ListGroupItem, Panel, Button, ButtonToolbar,
+import TextField from 'material-ui/TextField';
+import { Panel, Button, ButtonToolbar,
    FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import * as InterviewsActions from '../../../actions/InterviewActions';
 
@@ -30,6 +31,13 @@ class Interviews extends Component {
     }
     onDeleteClick(e, id) {
         this.props.removeInterview(id);
+    }
+    onNameChangeNew(e, id) {
+      console.log('onNameChangeNew', e, id);
+    }
+    onNameBlur(e, id) {
+      // TODO: Save interview name on blur
+        console.log('onNameBlur', e, id);
     }
     getValidationState() {
 
@@ -83,11 +91,14 @@ class Interviews extends Component {
                   </Panel>
               }
               <h3>Interviews:</h3>
-              <ListGroup>
+              <div>
                       {this.props.interviews.map(interview => (
-                          <ListGroupItem key={interview.id}>
-                              {interview.name}
-
+                          <div key={interview.id}>
+                              <TextField
+                                  defaultValue={interview.name}
+                                  onChange={(e) => this.onNameChangeNew(e, interview.id)}
+                                  onBlur={(e) => this.onNameBlur(e, interview.id)}
+                              />
                               <Button
                                   bsStyle="danger"
                                   bsSize="xsmall"
@@ -96,9 +107,9 @@ class Interviews extends Component {
                               >
                                   Delete
                               </Button>
-                          </ListGroupItem>
+                          </div>
                       ))}
-              </ListGroup>
+              </div>
           </Panel>
       );
   }
