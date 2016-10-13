@@ -112,7 +112,6 @@ class Questions extends Component {
             <h3>Questions:</h3>
             <ButtonToolbar>
                 <Button
-                    bsStyle=""
                     onClick={() => this.setState({ isEng: !this.state.isEng })}
                 >
                   {this.state.isEng

@@ -86,12 +86,4 @@ Question.propTypes = {
   update: PropTypes.func.isRequired,
 };
 
-// module.exports = connect(
-//   state => ({
-//     questions: state.questions.questions,
-//   }),
-//   dispatch => ({
-//     removeQuestion: (id) => dispatch(removeQuestion(id)),
-//   })
-// )(Question);
 module.exports = Question;
