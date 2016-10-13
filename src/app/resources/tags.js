@@ -2,7 +2,7 @@ import $http from 'axios';
 
 export function tagList(params = {}) {
   const { _start = 0, _limit = 50 } = params;
-    return $http({ url: `tags?_start=${_start}&_limit=${_limit}` });
+    return $http({ url: `tags?start=${_start}&limit=${_limit}` });
 }
 
 export function tagById(id) {

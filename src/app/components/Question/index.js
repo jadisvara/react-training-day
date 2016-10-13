@@ -4,6 +4,13 @@ import { ListGroupItem, Button } from 'react-bootstrap';
 // import { removeQuestion } from '../../actions';
 
 class Question extends Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        showBtns: false,
+      };
+    }
+
     componentWillMount() {
       console.log('Question');
     }
@@ -15,10 +22,22 @@ class Question extends Component {
     onEdit(e, id) {
         this.props.update(id);
     }
-//
+
+    onMouseEnter() {
+        this.setState({ showBtns: true });
+    }
+    onMouseLeave() {
+        this.setState({ showBtns: false });
+    }
+
     render() {
+      const { showBtns } = this.state;
+
       return (
-          <ListGroupItem>
+          <ListGroupItem
+              onMouseEnter={() => this.onMouseEnter()}
+              onMouseLeave={() => this.onMouseLeave()}
+          >
               #{this.props.id} {this.props.engText} / {this.props.ruText}
               {this.props.tags
                 ? this.props.tags.map(tag => (
@@ -26,27 +45,34 @@ class Question extends Component {
                         bsSize="xsmall"
                         key={tag.id}
                     >
-                        '#'{tag.tag}
+                        #{tag.tag}
                     </Button>
               ))
                 : ''
               }
-              <Button
-                  bsStyle="danger"
-                  bsSize="xsmall"
-                  style={{ float: 'right' }}
-                  onClick={e => this.onDelete(e, this.props.id)}
-              >
-                Delete
-              </Button>
-              <Button
-                  bsStyle="warning"
-                  bsSize="xsmall"
-                  style={{ float: 'right', marginRight: '10px' }}
-                  onClick={e => this.onEdit(e, this.props.id)}
-              >
-                Edit
-              </Button>
+              {showBtns
+                ?
+                  <div style={{ display: 'inline' }}>
+                      <Button
+                          bsStyle="danger"
+                          bsSize="xsmall"
+                          style={{ float: 'right' }}
+                          onClick={e => this.onDelete(e, this.props.id)}
+                      >
+                          Delete
+                      </Button>
+
+                      <Button
+                          bsStyle="warning"
+                          bsSize="xsmall"
+                          style={{ float: 'right', marginRight: '10px' }}
+                          onClick={e => this.onEdit(e, this.props.id)}
+                      >
+                          Edit
+                      </Button>
+                  </div>
+                : ''
+              }
           </ListGroupItem>
       );
     }

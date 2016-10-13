@@ -2,12 +2,12 @@ import $http from 'axios';
 
 export function questionList(params = {}) {
     const { _start = 0, _limit = 50 } = params;
-    return $http({ url: `questions?_start=${_start}&_limit=${_limit}` });
+    return $http({ url: `questions?start=${_start}&limit=${_limit}` });
 }
 
 export function saveQuestion(question) {
     return $http({
-      method: 'post',
+      method: 'POST',
       url: 'questions',
       data: question,
     });
@@ -15,7 +15,7 @@ export function saveQuestion(question) {
 
 export function updateQuestion(question) {
     return $http({
-      method: 'put',
+      method: 'PUT',
       url: `questions/${question.id}`,
       data: question,
     });

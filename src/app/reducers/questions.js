@@ -6,6 +6,20 @@ const INITIAL_STATE = {
     searchQuestions: [],
 };
 
+// Arguments passed to the reducer should be considered immutable.
+// In other words, they shouldn't be directly changed. Instead of a direct mutation,
+// we can use non-mutating methods like .concat() to essentially make a copy of the array,
+// and then we'll change and return the copy
+const updateQuestions = (questions, question) => {
+    const index = questions.findIndex((q) => q.id === question.id);
+    if (~index) { // index !== -1
+      Object.assign(questions[index], question);
+      console.log('questions[index]', questions[index]);
+    }
+    console.log('--questions', questions);
+    return questions;
+  };
+
 const QuestionsReducer = (state = INITIAL_STATE,
                       action = { type: null, payload: null }) => {
     switch (action.type) {
@@ -23,7 +37,10 @@ const QuestionsReducer = (state = INITIAL_STATE,
               questions: (state.questions.filter((question) => question.id !== action.payload)),
             };
         case ActionTypes.UPDATE_QUESTION:
-            return { ...state, questions: [...state.questions, action.payload] };
+            return {
+              ...state,
+              questions: updateQuestions(state.questions, action.payload),
+            };
         case ActionTypes.SEARCH_QUESTION:
         return {
           ...state,

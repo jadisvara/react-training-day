@@ -4,17 +4,20 @@ import { ControlLabel, FormControl, Button, FormGroup, Panel } from 'react-boots
 import SelectTags from '../SelectTags';
 
 class AddQuestion extends Component {
-  constructor(props) {
+    constructor(props) {
    super(props);
    this.handleEngTextChange = this.handleEngTextChange.bind(this);
    this.handleRuTextChange = this.handleRuTextChange.bind(this);
    this.add = this.add.bind(this);
+   this.update = this.update.bind(this);
    this.selectTag = this.selectTag.bind(this);
-  const { questionToEdit } = undefined;
+   const question = this.props.questionToEdit || null;
+   const tags = question ? question.tags.map(t => t.tag) : [];
+   console.log('--tags', tags);
    this.state = {
-     engText: questionToEdit ? questionToEdit.eng_text : '',
-     ruText: questionToEdit ? questionToEdit.rus_text : '',
-     selectedTags: [],
+     engText: question ? question.eng_text : '',
+     ruText: question ? question.rus_text : '',
+     selectedTags: tags,
    };
   }
     componentWillMount() {
@@ -43,14 +46,26 @@ class AddQuestion extends Component {
             });
           }
     }
-    selectTag(id) {
-      // console.log('selectTag this.state.selectedTags', this.state.selectedTags);
-      this.state.selectedTags.push(id);
-      // const tags = [...this.state.selectedTags, id];
-      // this.setState({
-      //     selectedTags: tags,
-      //  });
-        console.log('this.state.selectedTags', this.state.selectedTags);
+    update() {
+        if (this.state.engText.length > 0) {
+          this.props.update({
+              id: this.props.questionToEdit.id,
+              eng_text: this.state.engText,
+              rus_text: this.state.ruText,
+              tags: this.state.selectedTags,
+            });
+          }
+    }
+    selectTag(tag, isAdded) {
+      console.log('addQuestion tag, isAdded', tag.tag, isAdded);
+      if (isAdded) {
+          this.state.selectedTags.push(tag);
+      } else {
+          const index = this.state.selectedTags.findIndex(item => item === tag);
+          if (index !== -1) {
+              this.state.selectedTags.splice(index, 1);
+          }
+      }
     }
 
     render() {
@@ -73,9 +88,16 @@ class AddQuestion extends Component {
                       onChange={this.handleRuTextChange}
                   />
                   <Panel>
-                      <SelectTags tags={tags} select={this.selectTag}/>
+                      <SelectTags
+                          tags={tags}
+                          select={this.selectTag}
+                          preselectedTags={this.state.selectedTags}
+                      />
                   </Panel>
-                  <Button onClick={this.add}>Add</Button>
+                  {this.props.questionToEdit
+                      ? <Button onClick={this.update}>Update</Button>
+                      : <Button onClick={this.add}>Add</Button>
+                  }
               </FormGroup>
           </div>
       );
@@ -85,6 +107,7 @@ class AddQuestion extends Component {
 AddQuestion.propTypes = {
   tags: PropTypes.array.isRequired,
   save: PropTypes.func.isRequired,
-  // questionToEdit: PropTypes.object.isRequired,
+  update: PropTypes.func.isRequired,
+  questionToEdit: PropTypes.object,
 };
 module.exports = AddQuestion;

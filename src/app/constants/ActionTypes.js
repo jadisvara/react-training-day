@@ -10,6 +10,11 @@ const ActionType = {
     UPDATE_QUESTION: 9,
     GET_QUESTION: 10,
     SEARCH_QUESTION: 11,
+    SET_INTERVIEWS: 12,
+    REMOVE_INTERVIEW: 13,
+    UPDATE_INTERVIEW: 14,
+    SAVE_INTERVIEW: 15,
+    GET_INTERVIEW: 16,
 };
 
 export default ActionType;

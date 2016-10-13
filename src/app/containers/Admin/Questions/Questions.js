@@ -1,9 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-// import Panel from 'react-bootstrap/lib/Panel';
-// import Button from 'react-bootstrap/lib/Button';
-// import Modal from 'react-bootstrap/lib/Modal';
-import { ControlLabel, FormControl, FormGroup, Button, Panel, Modal } from 'react-bootstrap';
+import { ControlLabel, FormControl, FormGroup, Button, Panel,
+   Modal, ButtonToolbar } from 'react-bootstrap';
 import QuestionList from '../../../components/QuestionList';
 import AddQuestion from '../../../components/AddQuestion';
 // import { getQuestions, getTags, removeQuestion, updateQuestion } from '../../../actions';
@@ -13,6 +11,7 @@ class Questions extends Component {
   constructor(props) {
     super(props);
     this.openAddQuestionModal = this.openAddQuestionModal.bind(this);
+    this.openEditQuestionModal = this.openEditQuestionModal.bind(this);
     this.closeAddQuestionModal = this.closeAddQuestionModal.bind(this);
     this.deleteQuestion = this.deleteQuestion.bind(this);
     this.saveQuestion = this.saveQuestion.bind(this);
@@ -22,6 +21,7 @@ class Questions extends Component {
       showModal: false,
       searchText: '',
       searchQuestions: [],
+      isEng: true,
     };
   }
 
@@ -34,12 +34,20 @@ class Questions extends Component {
     }
   }
 
+  openEditQuestionModal(id) {
+      const q = this.props.questions.filter(item => item.id === id)[0];
+      this.setState({
+          questionToEdit: q,
+          showModal: true,
+      });
+  }
+
   openAddQuestionModal() {
-    this.setState({ showModal: true });
+    this.setState({ showModal: true, questionToEdit: null });
   }
 
   closeAddQuestionModal() {
-    this.setState({ showModal: false });
+    this.setState({ showModal: false, questionToEdit: null });
   }
 
   deleteQuestion(id) {
@@ -50,14 +58,8 @@ class Questions extends Component {
       this.props.saveQuestion(data);
   }
 
-  updateQuestion() {
-      // this.props.getQuestion(id);
-      // const q = this.props.questions.filter(item => item.id === id)[0];
-      // this.setState({
-      //   showModal: true,
-      //   question: q,
-      // });
-      // this.props.updateQuestion(data);
+  updateQuestion(data) {
+      this.props.updateQuestion(data);
   }
 
   handleSearchChange(e) {
@@ -75,15 +77,13 @@ class Questions extends Component {
               question.eng_text.toLowerCase().includes(text)
               || question.rus_text.toLowerCase().includes(text)),
         });
-       // this.props.searchQuestion(e.target.value);
-       console.log('this.state.searchQuestions', this.state.searchQuestions);
     }
   }
 
   render() {
     const { questions } = this.props;
     const { tags } = this.props;
-    const { showModal, searchQuestions } = this.state;
+    const { showModal, searchQuestions, questionToEdit } = this.state;
 
     return (
         <Panel>
@@ -104,16 +104,27 @@ class Questions extends Component {
                     ? <QuestionList
                         data={searchQuestions}
                         remove={this.deleteQuestion}
-                        update={this.updateQuestion}
+                        update={this.openEditQuestionModal}
                     />
                     : ''
                 }
             </FormGroup>
             <h3>Questions:</h3>
+            <ButtonToolbar>
+                <Button
+                    bsStyle=""
+                    onClick={() => this.setState({ isEng: !this.state.isEng })}
+                >
+                  {this.state.isEng
+                      ? "ru"
+                      : "eng"
+                  }
+                </Button>
+            </ButtonToolbar>
             <QuestionList
                 data={questions}
                 remove={this.deleteQuestion}
-                update={this.updateQuestion}
+                update={this.openEditQuestionModal}
             />
 
             <Modal show={showModal}>
@@ -124,6 +135,8 @@ class Questions extends Component {
                     <AddQuestion
                         tags={tags}
                         save={this.saveQuestion}
+                        update={this.updateQuestion}
+                        questionToEdit={questionToEdit}
                     />
                 </Modal.Body>
                 <Modal.Footer>
