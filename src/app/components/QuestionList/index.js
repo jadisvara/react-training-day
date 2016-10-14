@@ -1,7 +1,5 @@
 import React, { PropTypes } from 'react';
 import { List } from 'material-ui/List';
-
-// import { ListGroup } from 'react-bootstrap';
 import Question from '../Question';
 
 const QuestionList = ({ data, remove, update, isEng }) => (

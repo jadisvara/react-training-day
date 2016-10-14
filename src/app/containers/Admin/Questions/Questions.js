@@ -4,11 +4,12 @@ import TextField from 'material-ui/TextField';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 import Dialog from 'material-ui/Dialog';
-import { Toolbar } from 'material-ui/Toolbar';
 import FlatButton from 'material-ui/FlatButton';
+import Drawer from 'material-ui/Drawer';
 import { FormGroup, Button } from 'react-bootstrap';
 import QuestionList from '../../../components/QuestionList';
 import AddQuestion from '../../../components/AddQuestion';
+import AddQuestionMui from '../../../components/AddQuestionMui';
 import * as QuestionsActions from '../../../actions';
 
 class Questions extends Component {
@@ -26,6 +27,7 @@ class Questions extends Component {
       searchText: '',
       searchQuestions: [],
       isEng: true,
+      openRightNav: false,
     };
   }
   componentWillMount() {
@@ -36,11 +38,18 @@ class Questions extends Component {
         this.props.getTags();
     }
   }
+  onRightNavStateChange(openRightNav) {
+      this.setState({ openRightNav });
+      if (!openRightNav) {
+          this.setState({ questionToEdit: null });
+      }
+  }
   openEditQuestionModal(id) {
+    console.log('openEditQuestionModal', id);
       const q = this.props.questions.filter(item => item.id === id)[0];
       this.setState({
           questionToEdit: q,
-          showModal: true,
+          openRightNav: true,
       });
   }
   openAddQuestionModal() {
@@ -53,10 +62,10 @@ class Questions extends Component {
       this.props.removeQuestion(id);
   }
   saveQuestion(data) {
-      this.props.saveQuestion(data);
+      this.props.saveQuestion(data, this.props.getTags);
   }
   updateQuestion(data) {
-      this.props.updateQuestion(data);
+      this.props.updateQuestion(data, this.props.getTags);
   }
   handleSearchChange(e) {
     const self = this;
@@ -87,9 +96,6 @@ class Questions extends Component {
             >
                 <ContentAdd />
             </FloatingActionButton>
-            <Button bsStyle="primary" onClick={this.openAddQuestionModal}>
-            Add Question
-            </Button>
             <TextField
                 hintText="Enter search words"
                 floatingLabelText="Search for"
@@ -107,7 +113,6 @@ class Questions extends Component {
                     />
                 }
             </FormGroup>
-            <Toolbar/>
             <Button
                 onClick={() => this.setState({ isEng: !this.state.isEng })}
             >
@@ -144,6 +149,25 @@ class Questions extends Component {
                     questionToEdit={questionToEdit}
                 />
             </Dialog>
+
+            <FlatButton
+                label="Toggle Drawer"
+                onTouchTap={() => this.setState({ openRightNav: !this.state.openRightNav })}
+            />
+            <Drawer
+                width={500}
+                openSecondary
+                open={this.state.openRightNav}
+                docked={false}
+                onRequestChange={(openRightNav) => this.onRightNavStateChange(openRightNav)}
+            >
+                <AddQuestionMui
+                    tags={tags}
+                    save={this.saveQuestion}
+                    update={this.updateQuestion}
+                    questionToEdit={questionToEdit}
+                />
+            </Drawer>
         </div>
     );
   }
@@ -170,8 +194,8 @@ module.exports = connect(
     getTags: () => dispatch(QuestionsActions.getTags()),
     removeQuestion: (id) => dispatch(QuestionsActions.removeQuestion(id)),
     getQuestion: (id) => dispatch(QuestionsActions.getQuestion(id)),
-    updateQuestion: (data) => dispatch(QuestionsActions.updateQuestion(data)),
-    saveQuestion: (data) => dispatch(QuestionsActions.saveQuestion(data)),
+    updateQuestion: (data, callback) => dispatch(QuestionsActions.updateQuestion(data, callback)),
+    saveQuestion: (data, callback) => dispatch(QuestionsActions.saveQuestion(data, callback)),
     searchQuestion: (text) => dispatch(QuestionsActions.searchQuestion(text)),
   })
 )(Questions);

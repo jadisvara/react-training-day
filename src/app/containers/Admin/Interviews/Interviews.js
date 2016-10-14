@@ -1,9 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
-import TextField from 'material-ui/TextField';
-import { Panel, Button, ButtonToolbar,
+import { List } from 'material-ui/List';
+import { Button,
    FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import * as InterviewsActions from '../../../actions/InterviewActions';
+import InterviewItem from '../../../components/InterviewItem';
 
 class Interviews extends Component {
     constructor(props) {
@@ -53,7 +54,7 @@ class Interviews extends Component {
       // onClick={ ()=> this.setState({ showAddInterviewFrom: !this.state.showAddInterviewFrom })}
       // const { interviews } = this.props;
       return (
-          <Panel header="Interviews" bsStyle="primary">
+          <div header="Interviews" bsStyle="primary">
               <Button
                   bsStyle="primary"
                   onClick={() =>
@@ -62,7 +63,7 @@ class Interviews extends Component {
                   Add Interview
               </Button>
               {this.state.showAddInterviewFrom &&
-                  <Panel>
+                  <div>
                       <FormGroup
                           controlId="questionField"
                           validationState={this.getValidationState()}
@@ -74,7 +75,7 @@ class Interviews extends Component {
                               placeholder="Please enter an interview name..."
                               onChange={e => this.onNameChange(e)}
                           />
-                          <ButtonToolbar>
+                          <div>
                               <Button
                                   bsStyle="success"
                                   onClick={() => this.onAddInterviewClick()}
@@ -86,31 +87,23 @@ class Interviews extends Component {
                               >
                                 Cancel
                               </Button>
-                          </ButtonToolbar>
+                          </div>
                       </FormGroup>
-                  </Panel>
+                  </div>
               }
               <h3>Interviews:</h3>
-              <div>
-                      {this.props.interviews.map(interview => (
-                          <div key={interview.id}>
-                              <TextField
-                                  defaultValue={interview.name}
-                                  onChange={(e) => this.onNameChangeNew(e, interview.id)}
-                                  onBlur={(e) => this.onNameBlur(e, interview.id)}
-                              />
-                              <Button
-                                  bsStyle="danger"
-                                  bsSize="xsmall"
-                                  style={{ float: 'right' }}
-                                  onClick={e => this.onDeleteClick(e, interview.id)}
-                              >
-                                  Delete
-                              </Button>
-                          </div>
-                      ))}
-              </div>
-          </Panel>
+              <List style={{ padding: '10px' }}>
+                  {this.props.interviews.map(interview => (
+                      <InterviewItem
+                          key={interview.id}
+                          interview={interview}
+                          onNameChangeNew={(e, id) => this.onNameChangeNew(e, id)}
+                          onNameBlur={(e, id) => this.onNameBlur(e, id)}
+                          onDeleteClick={(e, id) => this.onDeleteClick(e, id)}
+                      />
+                  ))}
+              </List>
+          </div>
       );
   }
 }

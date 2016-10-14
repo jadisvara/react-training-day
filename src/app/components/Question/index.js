@@ -67,6 +67,8 @@ class Question extends Component {
                             <Chip
                                 key={tag.id}
                                 style={styles.chip}
+                                labelColor="#fff"
+                                labelStyle={{ fontSize: '12px' }}
                                 onRequestDelete={() => this.handleDeleteTag(tag.id)}
                             >
                                 {tag.tag}
