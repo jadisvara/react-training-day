@@ -1,14 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import TextField from 'material-ui/TextField';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
-import ContentAdd from 'material-ui/svg-icons/content/add';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import Drawer from 'material-ui/Drawer';
 import { FormGroup, Button } from 'react-bootstrap';
 import QuestionList from '../../../components/QuestionList';
 import AddQuestion from '../../../components/AddQuestion';
+import AddBtn from '../../../components/AddBtn';
 import AddQuestionMui from '../../../components/AddQuestionMui';
 import * as QuestionsActions from '../../../actions';
 import * as CommonActions from '../../../actions/CommonActions';
@@ -68,7 +67,6 @@ class Questions extends Component {
       this.props.showConfirmDialog(body, actions);
   }
   openEditQuestionModal(id) {
-    console.log('openEditQuestionModal', id);
       const q = this.props.questions.filter(item => item.id === id)[0];
       this.setState({
           questionToEdit: q,
@@ -76,7 +74,7 @@ class Questions extends Component {
       });
   }
   openAddQuestionModal() {
-    this.setState({ showModal: true, questionToEdit: null });
+    this.setState({ openRightNav: true, questionToEdit: null });
   }
   closeAddQuestionModal() {
     this.setState({ showModal: false, questionToEdit: null });
@@ -119,17 +117,13 @@ class Questions extends Component {
 
     return (
         <div>
-            <FloatingActionButton
-                onClick={this.openAddQuestionModal}
-            >
-                <ContentAdd />
-            </FloatingActionButton>
+            <AddBtn onClick={this.openAddQuestionModal} />
             <TextField
                 hintText="Enter search words"
                 floatingLabelText="Search for"
                 value={this.state.searchText}
                 onChange={this.handleSearchChange}
-                style={{ display: 'block', margin: '10px' }}
+                style={{ display: 'block' }}
             />
             <FormGroup controlId="questionSearch">
                 {searchQuestions &&

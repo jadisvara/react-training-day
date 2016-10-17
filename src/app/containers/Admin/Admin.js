@@ -11,36 +11,26 @@ import * as CommonActions from '../../actions/CommonActions';
 
 // rendered once, when app started, never will be unmount
 class Admin extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      openLeftNav: false,
-    };
-  }
+    constructor(props) {
+      super(props);
+      this.state = {
+        openLeftNav: false,
+      };
+    }
     componentWillMount() {
         console.log('Admin mounted!');
     }
-
     toggleLeftNav() {
         this.setState({ openLeftNav: !this.state.openLeftNav });
     }
 
     render() {
-      console.log('this.props', this.props);
         return (
             <div>
                 <AppBar
                     title={
                         <span>Admin</span>
                     }
-                    // iconElementRight={
-                    //     <div>
-                    //         <Link to="/admin">Home</Link>&nbsp;
-                    //         <Link to="/admin/questions">Questions</Link>&nbsp;
-                    //         <Link to="/admin/tags">Tags</Link>&nbsp;
-                    //         <Link to="/admin/interviews">Interviews</Link>&nbsp;
-                    //     </div>
-                    // }
                     onLeftIconButtonTouchTap={() => this.toggleLeftNav()}
                 />
                 <Paper>

@@ -10,7 +10,6 @@ const CommonReducer = (state = INITIAL_STATE,
                       action = { type: null, payload: null }) => {
     switch (action.type) {
         case ActionTypes.SHOW_CONFIRM_DIALOG:
-        console.log('CommonReducer action', action.payload);
             return {
               ...state,
               isConfirmDialogOpen: true,

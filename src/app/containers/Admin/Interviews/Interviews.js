@@ -5,6 +5,7 @@ import { Button,
    FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import * as InterviewsActions from '../../../actions/InterviewActions';
 import InterviewItem from '../../../components/InterviewItem';
+import AddBtn from '../../../components/AddBtn';
 
 class Interviews extends Component {
     constructor(props) {
@@ -54,14 +55,11 @@ class Interviews extends Component {
       // onClick={ ()=> this.setState({ showAddInterviewFrom: !this.state.showAddInterviewFrom })}
       // const { interviews } = this.props;
       return (
-          <div header="Interviews" bsStyle="primary">
-              <Button
-                  bsStyle="primary"
+          <div>
+              <AddBtn
                   onClick={() =>
                     this.setState({ showAddInterviewFrom: !this.state.showAddInterviewFrom })}
-              >
-                  Add Interview
-              </Button>
+              />
               {this.state.showAddInterviewFrom &&
                   <div>
                       <FormGroup
@@ -91,7 +89,6 @@ class Interviews extends Component {
                       </FormGroup>
                   </div>
               }
-              <h3>Interviews:</h3>
               <List style={{ padding: '10px' }}>
                   {this.props.interviews.map(interview => (
                       <InterviewItem
