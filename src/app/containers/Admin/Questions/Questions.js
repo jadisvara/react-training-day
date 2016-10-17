@@ -11,6 +11,7 @@ import QuestionList from '../../../components/QuestionList';
 import AddQuestion from '../../../components/AddQuestion';
 import AddQuestionMui from '../../../components/AddQuestionMui';
 import * as QuestionsActions from '../../../actions';
+import * as CommonActions from '../../../actions/CommonActions';
 
 class Questions extends Component {
   constructor(props) {
@@ -18,9 +19,10 @@ class Questions extends Component {
     this.openAddQuestionModal = this.openAddQuestionModal.bind(this);
     this.openEditQuestionModal = this.openEditQuestionModal.bind(this);
     this.closeAddQuestionModal = this.closeAddQuestionModal.bind(this);
-    this.deleteQuestion = this.deleteQuestion.bind(this);
+    this.onDeleteQuestion = this.onDeleteQuestion.bind(this);
     this.saveQuestion = this.saveQuestion.bind(this);
     this.updateQuestion = this.updateQuestion.bind(this);
+    this.deleteTag = this.deleteTag.bind(this);
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.state = {
       showModal: false,
@@ -44,6 +46,27 @@ class Questions extends Component {
           this.setState({ questionToEdit: null });
       }
   }
+  onDeleteQuestion(id) {
+     // TODO: add confirm dialog here
+      // this.props.removeQuestion(id);
+      const body = 'Delete this Question?';
+      const actions = [
+          <FlatButton
+              label="Cancel"
+              primary
+              onTouchTap={this.props.closeConfirmDialog}
+          />,
+          <FlatButton
+              label="Submit"
+              primary
+              onTouchTap={() => {
+                this.props.closeConfirmDialog();
+                this.props.removeQuestion(id);
+              }}
+          />,
+      ];
+      this.props.showConfirmDialog(body, actions);
+  }
   openEditQuestionModal(id) {
     console.log('openEditQuestionModal', id);
       const q = this.props.questions.filter(item => item.id === id)[0];
@@ -58,14 +81,19 @@ class Questions extends Component {
   closeAddQuestionModal() {
     this.setState({ showModal: false, questionToEdit: null });
   }
-  deleteQuestion(id) {
-      this.props.removeQuestion(id);
-  }
   saveQuestion(data) {
       this.props.saveQuestion(data, this.props.getTags);
   }
   updateQuestion(data) {
       this.props.updateQuestion(data, this.props.getTags);
+  }
+  deleteTag(tagId, questionData) {
+    this.props.updateQuestion({
+        id: questionData.id,
+        eng_text: questionData.engText,
+        rus_text: questionData.ruText,
+        tags: questionData.tags.filter(t => t.id !== tagId).map(t => t.tag),
+      });
   }
   handleSearchChange(e) {
     const self = this;
@@ -107,8 +135,9 @@ class Questions extends Component {
                 {searchQuestions &&
                     <QuestionList
                         data={searchQuestions}
-                        remove={this.deleteQuestion}
+                        remove={this.onDeleteQuestion}
                         update={this.openEditQuestionModal}
+                        deleteTag={this.deleteTag}
                         isEng={this.state.isEng}
                     />
                 }
@@ -120,8 +149,9 @@ class Questions extends Component {
             </Button>
             <QuestionList
                 data={questions}
-                remove={this.deleteQuestion}
+                remove={this.onDeleteQuestion}
                 update={this.openEditQuestionModal}
+                deleteTag={this.deleteTag}
                 isEng={this.state.isEng}
             />
             <Dialog
@@ -168,6 +198,8 @@ class Questions extends Component {
                     questionToEdit={questionToEdit}
                 />
             </Drawer>
+
+
         </div>
     );
   }
@@ -182,6 +214,8 @@ Questions.propTypes = {
   updateQuestion: PropTypes.func.isRequired,
   saveQuestion: PropTypes.func.isRequired,
   searchQuestion: PropTypes.func.isRequired,
+  showConfirmDialog: PropTypes.func.isRequired,
+  closeConfirmDialog: PropTypes.func.isRequired,
 };
 
 module.exports = connect(
@@ -197,6 +231,8 @@ module.exports = connect(
     updateQuestion: (data, callback) => dispatch(QuestionsActions.updateQuestion(data, callback)),
     saveQuestion: (data, callback) => dispatch(QuestionsActions.saveQuestion(data, callback)),
     searchQuestion: (text) => dispatch(QuestionsActions.searchQuestion(text)),
+    showConfirmDialog: (body, actions) => dispatch(CommonActions.showConfirmDialog(body, actions)),
+    closeConfirmDialog: () => dispatch(CommonActions.closeConfirmDialog()),
   })
 )(Questions);
 

@@ -15,6 +15,8 @@ const ActionType = {
     UPDATE_INTERVIEW: 14,
     SAVE_INTERVIEW: 15,
     GET_INTERVIEW: 16,
+    SHOW_CONFIRM_DIALOG: 17,
+    CLOSE_CONFIRM_DIALOG: 18,
 };
 
 export default ActionType;

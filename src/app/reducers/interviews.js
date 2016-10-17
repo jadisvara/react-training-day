@@ -23,6 +23,7 @@ const InterviewsReducer = (state = INITIAL_STATE,
               interviews: state.interviews.filter((i) => i.id !== action.payload),
             };
         case ActionTypes.UPDATE_INTERVIEW:
+        // TODO: re-write as for questions
             return {
               ...state,
               interviews: getUpdatedInterviews(state.interviews, action.payload),

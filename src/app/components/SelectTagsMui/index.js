@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import Checkbox from 'material-ui/Checkbox';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
+import { GridList } from 'material-ui/GridList';
 
 class SelectTagsMui extends Component {
     constructor(props) {
@@ -35,23 +36,24 @@ class SelectTagsMui extends Component {
     render() {
       return (
           <div>
-              {this.props.tags.map(tag => (
-                  <Checkbox
-                      key={tag.id}
-                      label={tag.tag}
-                      checked={tag.selected}
-                      onCheck={(e) => this.onChange(e, tag)}
-                  />
-              ))}
-              {this.props.createdTags.map(tag => (
-                  <Checkbox
-                      key={tag.id}
-                      label={tag.tag}
-                      checked={tag.selected}
-                      onCheck={(e) => this.onChange(e, tag)}
-                  />
-              ))}
-
+              <GridList cellHeight={24}>
+                  {this.props.tags.map(tag => (
+                      <Checkbox
+                          key={tag.id}
+                          label={tag.tag}
+                          checked={tag.selected}
+                          onCheck={(e) => this.onChange(e, tag)}
+                      />
+                  ))}
+                  {this.props.createdTags.map(tag => (
+                      <Checkbox
+                          key={tag.id}
+                          label={tag.tag}
+                          checked={tag.selected}
+                          onCheck={(e) => this.onChange(e, tag)}
+                      />
+                  ))}
+              </GridList>
               <TextField
                   hintText="You can enter a new tag here..."
                   floatingLabelText="New Tag"

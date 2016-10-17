@@ -43,8 +43,9 @@ class Question extends Component {
     onMouseLeave() {
         this.setState({ showBtns: false });
     }
-    handleDeleteTag(id) {
-      console.log('delete Tag', id);
+    handleDeleteTag(tagId, question) {
+      console.log('delete Tag', tagId);
+      this.props.deleteTag(tagId, question);
     }
 
     render() {
@@ -69,7 +70,7 @@ class Question extends Component {
                                 style={styles.chip}
                                 labelColor="#fff"
                                 labelStyle={{ fontSize: '12px' }}
-                                onRequestDelete={() => this.handleDeleteTag(tag.id)}
+                                onRequestDelete={() => this.handleDeleteTag(tag.id, data)}
                             >
                                 {tag.tag}
                             </Chip>
@@ -98,6 +99,7 @@ Question.propTypes = {
   data: PropTypes.object.isRequired,
   remove: PropTypes.func.isRequired,
   update: PropTypes.func.isRequired,
+  deleteTag: PropTypes.func.isRequired,
   isEng: PropTypes.bool.isRequired,
 };
 

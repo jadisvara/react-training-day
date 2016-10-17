@@ -6,6 +6,7 @@ import users from './users';
 import questions from './questions';
 import tags from './tags';
 import interviewState from './interviews';
+import commonState from './common';
 
 const rootReducer = combineReducers({
     routing,
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
     questions,
     tags,
     interviewState,
+    commonState,
     // add here other reducers
 });
 
