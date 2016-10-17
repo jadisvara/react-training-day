@@ -4,13 +4,23 @@ import TextField from 'material-ui/TextField';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import Drawer from 'material-ui/Drawer';
-import { FormGroup, Button } from 'react-bootstrap';
+import { FormGroup } from 'react-bootstrap';
 import QuestionList from '../../../components/QuestionList';
 import AddQuestion from '../../../components/AddQuestion';
 import AddBtn from '../../../components/AddBtn';
 import AddQuestionMui from '../../../components/AddQuestionMui';
+import LangSwitcher from '../../../components/LangSwitcher';
 import * as QuestionsActions from '../../../actions';
 import * as CommonActions from '../../../actions/CommonActions';
+
+// const styles = {
+//   search: {
+//   position: 'absolute',
+//   zIndex: 1100,
+//   right: '340px',
+//   top: '0px',
+// },
+// };
 
 class Questions extends Component {
   constructor(props) {
@@ -136,11 +146,10 @@ class Questions extends Component {
                     />
                 }
             </FormGroup>
-            <Button
+            <LangSwitcher
+                isEng={this.state.isEng}
                 onClick={() => this.setState({ isEng: !this.state.isEng })}
-            >
-              {this.state.isEng ? 'ru' : 'eng'}
-            </Button>
+            />
             <QuestionList
                 data={questions}
                 remove={this.onDeleteQuestion}

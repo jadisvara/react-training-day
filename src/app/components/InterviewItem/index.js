@@ -14,7 +14,9 @@ class InterviewItem extends Component {
     return (
         <ListItem>
             <TextField
-                defaultValue={interview.name}
+                name={interview.name}
+                value={interview.name}
+                // defaultValue={interview.name}
                 onChange={(e) => this.props.onNameChangeNew(e, interview.id)}
                 onBlur={(e) => this.props.onNameBlur(e, interview.id)}
             />

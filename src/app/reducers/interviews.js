@@ -9,14 +9,18 @@ const getUpdatedInterviews = (interviews, interview) => {
     if (~index) { // eq to index !== -1
       Object.assign(interviews[index], interview);
     }
-    return interviews;
+    return interviews.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
   };
 
 const InterviewsReducer = (state = INITIAL_STATE,
                       action = { type: null, payload: null }) => {
     switch (action.type) {
         case ActionTypes.SET_INTERVIEWS:
-            return { ...state, interviews: action.payload };
+            return {
+              ...state,
+              interviews: action.payload.sort((a, b) =>
+              new Date(b.updated_at) - new Date(a.updated_at)),
+            };
         case ActionTypes.REMOVE_INTERVIEW:
             return {
               ...state,
@@ -29,7 +33,13 @@ const InterviewsReducer = (state = INITIAL_STATE,
               interviews: getUpdatedInterviews(state.interviews, action.payload),
             };
         case ActionTypes.SAVE_INTERVIEW:
-            return { ...state, interviews: [...state.interviews, action.payload] };
+            return {
+              ...state,
+              interviews: [
+                ...state.interviews,
+                action.payload].sort((a, b) =>
+                  new Date(b.updated_at) - new Date(a.updated_at)),
+            };
         default:
             return state;
     }

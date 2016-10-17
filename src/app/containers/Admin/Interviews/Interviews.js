@@ -1,11 +1,11 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import { List } from 'material-ui/List';
-import { Button,
-   FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
+
 import * as InterviewsActions from '../../../actions/InterviewActions';
 import InterviewItem from '../../../components/InterviewItem';
 import AddBtn from '../../../components/AddBtn';
+import AddInterview from '../../../components/AddInterview';
 
 class Interviews extends Component {
     constructor(props) {
@@ -19,10 +19,11 @@ class Interviews extends Component {
     componentWillMount() {
       this.props.getInterviews();
     }
-    onAddInterviewClick() {
+    onAddInterviewClick(name) {
+        if (name === '') return; // TODO: add validation inside AddInterview component
         this.setState({ showAddInterviewFrom: false });
         this.props.createInterview({
-          name: this.state.name,
+          name,
         });
     }
     onCancelClick() {
@@ -42,6 +43,7 @@ class Interviews extends Component {
         console.log('onNameBlur', e, id);
     }
     getValidationState() {
+        // TODO: name should not be empty
 
     }
     openAddInterview() {
@@ -58,38 +60,17 @@ class Interviews extends Component {
           <div>
               <AddBtn
                   onClick={() =>
-                    this.setState({ showAddInterviewFrom: !this.state.showAddInterviewFrom })}
+                    this.setState({
+                      showAddInterviewFrom: !this.state.showAddInterviewFrom,
+                    })}
               />
               {this.state.showAddInterviewFrom &&
-                  <div>
-                      <FormGroup
-                          controlId="questionField"
-                          validationState={this.getValidationState()}
-                      >
-                          <ControlLabel>New Interview:</ControlLabel>
-                          <FormControl
-                              type="text"
-                              value={this.state.name}
-                              placeholder="Please enter an interview name..."
-                              onChange={e => this.onNameChange(e)}
-                          />
-                          <div>
-                              <Button
-                                  bsStyle="success"
-                                  onClick={() => this.onAddInterviewClick()}
-                              >
-                                Add
-                              </Button>
-                              <Button
-                                  onClick={() => this.onCancelClick()}
-                              >
-                                Cancel
-                              </Button>
-                          </div>
-                      </FormGroup>
-                  </div>
+                  <AddInterview
+                      add={(name) => this.onAddInterviewClick(name)}
+                      cancel={() => this.onCancelClick()}
+                  />
               }
-              <List style={{ padding: '10px' }}>
+              <List style={{ padding: '20px 10px 10px 10px' }}>
                   {this.props.interviews.map(interview => (
                       <InterviewItem
                           key={interview.id}
