@@ -35,6 +35,9 @@ class Interviews extends Component {
     onDeleteClick(e, id) {
         this.props.removeInterview(id);
     }
+    onUpdate(data) {
+        this.props.updateInterview(data, this.props.getInterviews);
+    }
     onNameChangeNew(e, id) {
       console.log('onNameChangeNew', e, id);
     }
@@ -75,9 +78,8 @@ class Interviews extends Component {
                       <InterviewItem
                           key={interview.id}
                           interview={interview}
-                          onNameChangeNew={(e, id) => this.onNameChangeNew(e, id)}
-                          onNameBlur={(e, id) => this.onNameBlur(e, id)}
                           onDeleteClick={(e, id) => this.onDeleteClick(e, id)}
+                          onSaveClick={(data) => this.onUpdate(data)}
                       />
                   ))}
               </List>
@@ -90,6 +92,8 @@ Interviews.propTypes = {
   getInterviews: PropTypes.func.isRequired,
   createInterview: PropTypes.func.isRequired,
   removeInterview: PropTypes.func.isRequired,
+  getInterview: PropTypes.func.isRequired,
+  updateInterview: PropTypes.func.isRequired,
 };
 
 module.exports = connect(
@@ -100,5 +104,8 @@ module.exports = connect(
     getInterviews: () => dispatch(InterviewsActions.getInterviews()),
     createInterview: (data) => dispatch(InterviewsActions.saveInterview(data)),
     removeInterview: (id) => dispatch(InterviewsActions.removeInterview(id)),
+    getInterview: (id) => dispatch(InterviewsActions.getInterview(id)),
+    updateInterview: (data, callback) =>
+        dispatch(InterviewsActions.updateInterview(data, callback)),
   })
 )(Interviews);

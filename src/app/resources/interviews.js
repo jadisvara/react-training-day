@@ -1,8 +1,7 @@
 import $http from 'axios';
 
-export function interviewList(params = {}) {
-    const { _start = 0, _limit = 50 } = params;
-    return $http({ url: `interviews?start=${_start}&limit=${_limit}` });
+export function interviewList() {
+    return $http({ url: 'interviews' });
 }
 
 export function saveInterview(interview) {

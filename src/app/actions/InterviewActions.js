@@ -17,7 +17,6 @@ export const getInterviews = () => dispatch => {
     });
 };
 export const removeInterview = (id) => dispatch => {
-    console.log('removeInterview', id);
     removeInterviewApi(id).then(() => {
       dispatch({
           type: ActionType.REMOVE_INTERVIEW,
@@ -26,7 +25,6 @@ export const removeInterview = (id) => dispatch => {
     });
 };
 export const saveInterview = (data) => dispatch => {
-    console.log('saveInterview', data);
     saveInterviewApi(data).then(response => {
       dispatch({
           type: ActionType.SAVE_INTERVIEW,
@@ -34,13 +32,15 @@ export const saveInterview = (data) => dispatch => {
       });
     });
 };
-export const updateInterview = (data) => dispatch => {
-    console.log('updateInterview', data);
+export const updateInterview = (data, callback) => dispatch => {
     updateInterviewApi(data).then(response => {
       dispatch({
           type: ActionType.UPDATE_INTERVIEW,
           payload: response.data,
       });
+      if (callback) {
+        callback();
+      }
     });
 };
 export const getInterview = (id) => dispatch => {
