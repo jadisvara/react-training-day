@@ -9,6 +9,11 @@ const TagsReducer = (state = INITIAL_STATE,
     switch (action.type) {
         case ActionTypes.SET_TAGS:
             return { ...state, tags: action.payload };
+        case ActionTypes.SAVE_TAGS:
+            return {
+              ...state,
+              tags: [...state.tags, action.payload],
+            };
         default:
             return state;
     }

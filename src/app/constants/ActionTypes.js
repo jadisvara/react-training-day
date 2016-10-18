@@ -17,6 +17,7 @@ const ActionType = {
     GET_INTERVIEW: 16,
     SHOW_CONFIRM_DIALOG: 17,
     CLOSE_CONFIRM_DIALOG: 18,
+    SAVE_TAG: 19,
 };
 
 export default ActionType;

@@ -10,7 +10,8 @@ import AddQuestion from '../../../components/AddQuestion';
 import AddBtn from '../../../components/AddBtn';
 import AddQuestionMui from '../../../components/AddQuestionMui';
 import LangSwitcher from '../../../components/LangSwitcher';
-import * as QuestionsActions from '../../../actions';
+import * as QuestionsActions from '../../../actions/QuestionActions';
+import * as TagActions from '../../../actions/TagActions';
 import * as CommonActions from '../../../actions/CommonActions';
 
 // const styles = {
@@ -216,7 +217,6 @@ Questions.propTypes = {
   removeQuestion: PropTypes.func.isRequired,
   updateQuestion: PropTypes.func.isRequired,
   saveQuestion: PropTypes.func.isRequired,
-  searchQuestion: PropTypes.func.isRequired,
   showConfirmDialog: PropTypes.func.isRequired,
   closeConfirmDialog: PropTypes.func.isRequired,
 };
@@ -228,12 +228,13 @@ module.exports = connect(
   }),
   dispatch => ({
     getQuestions: () => dispatch(QuestionsActions.getQuestions()),
-    getTags: () => dispatch(QuestionsActions.getTags()),
     removeQuestion: (id) => dispatch(QuestionsActions.removeQuestion(id)),
     getQuestion: (id) => dispatch(QuestionsActions.getQuestion(id)),
     updateQuestion: (data, callback) => dispatch(QuestionsActions.updateQuestion(data, callback)),
     saveQuestion: (data, callback) => dispatch(QuestionsActions.saveQuestion(data, callback)),
-    searchQuestion: (text) => dispatch(QuestionsActions.searchQuestion(text)),
+
+    getTags: () => dispatch(TagActions.getTags()),
+
     showConfirmDialog: (body, actions) => dispatch(CommonActions.showConfirmDialog(body, actions)),
     closeConfirmDialog: () => dispatch(CommonActions.closeConfirmDialog()),
   })
