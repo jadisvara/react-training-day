@@ -2,6 +2,7 @@ import ActionTypes from '../constants/ActionTypes';
 
 const INITIAL_STATE = {
     interviews: [],
+    interview: {},
 };
 const InterviewsReducer = (state = INITIAL_STATE,
                       action = { type: null, payload: null }) => {
@@ -35,6 +36,11 @@ const InterviewsReducer = (state = INITIAL_STATE,
                 ...state.interviews,
                 action.payload].sort((a, b) =>
                   new Date(b.updated_at) - new Date(a.updated_at)),
+            };
+        case ActionTypes.GET_INTERVIEW:
+            return {
+              ...state,
+              interview: Object.assign({}, state.interview, action.payload),
             };
         default:
             return state;

@@ -2,6 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import { ListItem } from 'material-ui/List';
+import Link from 'react-router/lib/Link';
 
 class InterviewItem extends Component {
     constructor(props) {
@@ -31,6 +32,9 @@ class InterviewItem extends Component {
         showSaveCancelBtn: false,
       });
     }
+    onEditClick() {
+
+    }
     onNameChange(e) {
       this.setState({
         name: e.target.value,
@@ -50,11 +54,24 @@ class InterviewItem extends Component {
                   value={this.state.name}
                   onChange={(e) => this.onNameChange(e)}
               />
-              <FlatButton
-                  label="Delete"
-                  style={{ float: 'right' }}
-                  onTouchTap={e => this.props.onDeleteClick(e, interview.id)}
-              />
+              {!this.state.showSaveCancelBtn &&
+                  <FlatButton
+                      label="Delete"
+                      style={{ float: 'right' }}
+                      onTouchTap={e => this.props.onDeleteClick(e, interview.id)}
+                  />
+              }
+              {!this.state.showSaveCancelBtn &&
+                  <Link
+                      to={`/admin/interview/${interview.id}`}
+                  >
+                      <FlatButton
+                          label="Edit"
+                          style={{ float: 'right' }}
+                          onTouchTap={() => this.onEditClick()}
+                      />
+                  </Link>
+              }
               {this.state.showSaveCancelBtn &&
                   <FlatButton
                       label="Cancel"
@@ -64,6 +81,7 @@ class InterviewItem extends Component {
               }
               {this.state.showSaveCancelBtn &&
                   <FlatButton
+                      primary
                       label="Save"
                       style={{ float: 'right' }}
                       onTouchTap={() => this.onSaveClick()}
