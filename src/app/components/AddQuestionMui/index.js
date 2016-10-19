@@ -3,6 +3,8 @@ import TextField from 'material-ui/TextField';
 // import { List, ListItem } from 'material-ui/List';
 import Subheader from 'material-ui/Subheader';
 import RaisedButton from 'material-ui/RaisedButton';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
 import SelectTagsMui from '../SelectTagsMui';
 
 class AddQuestionMui extends Component {
@@ -21,6 +23,7 @@ class AddQuestionMui extends Component {
          createdTags: [],
          engText: question ? question.eng_text : '',
          ruText: question ? question.rus_text : '',
+         selectedLevel: 1,
        };
     }
     componentWillMount() {
@@ -112,7 +115,11 @@ class AddQuestionMui extends Component {
         });
       }
     }
-
+    handleLevelChange(e, index, value) {
+      this.setState({
+          selectedLevel: value,
+      });
+    }
     render() {
       const question = this.props.questionToEdit || null;
 
@@ -140,6 +147,15 @@ class AddQuestionMui extends Component {
                       defaultValue={question ? question.rus_text : ''}
                       value={this.state.ruText}
                   />
+                  <DropDownMenu
+                      value={this.state.selectedLevel}
+                      onChange={(e, index, value) =>
+                        this.handleLevelChange(e, index, value)}
+                  >
+                      <MenuItem value={1} primaryText="Theoretical" />
+                      <MenuItem value={2} primaryText="Applied" />
+                      <MenuItem value={3} primaryText="Instrumental" />
+                  </DropDownMenu>
                   <SelectTagsMui
                       tags={this.state.tags}
                       createdTags={this.state.createdTags}
