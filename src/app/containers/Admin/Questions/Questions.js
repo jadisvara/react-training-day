@@ -1,10 +1,17 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+
 import TextField from 'material-ui/TextField';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import Drawer from 'material-ui/Drawer';
+import AutoComplete from 'material-ui/AutoComplete';
+import Chip from 'material-ui/Chip';
+import Paper from 'material-ui/Paper';
+import { cyan500 } from 'material-ui/styles/colors';
+
 import { FormGroup } from 'react-bootstrap';
+
 import QuestionList from '../../../components/QuestionList';
 import AddQuestion from '../../../components/AddQuestion';
 import AddBtn from '../../../components/AddBtn';
@@ -14,14 +21,22 @@ import * as QuestionsActions from '../../../actions/QuestionActions';
 import * as TagActions from '../../../actions/TagActions';
 import * as CommonActions from '../../../actions/CommonActions';
 
-// const styles = {
-//   search: {
-//   position: 'absolute',
-//   zIndex: 1100,
-//   right: '340px',
-//   top: '0px',
-// },
-// };
+const styles = {
+  chip: {
+    margin: 4,
+    backgroundColor: cyan500,
+  },
+  wrapper: {
+    display: 'inline-flex',
+    flexWrap: 'wrap',
+    width: '30%',
+  },
+};
+
+const dataSourceConfig = {
+  text: 'tag',
+  value: 'id',
+};
 
 class Questions extends Component {
   constructor(props) {
@@ -40,6 +55,8 @@ class Questions extends Component {
       searchQuestions: [],
       isEng: true,
       openRightNav: false,
+      selectedTags: [],
+      questions: this.props.questions || [],
     };
   }
   componentWillMount() {
@@ -49,6 +66,11 @@ class Questions extends Component {
     if (this.props.tags.length === 0) {
         this.props.getTags();
     }
+  }
+  componentWillReceiveProps(newProps) {
+    this.setState({
+      questions: newProps.questions,
+    });
   }
   onRightNavStateChange(openRightNav) {
       this.setState({ openRightNav });
@@ -76,6 +98,10 @@ class Questions extends Component {
           />,
       ];
       this.props.showConfirmDialog(body, actions);
+  }
+  onNewItemAddedIntoFilter(chosenRequest, index) {
+      const newSelectedTags = [...this.state.selectedTags, this.props.tags[index]];
+      this.updateStateByFilter(newSelectedTags);
   }
   openEditQuestionModal(id) {
       const q = this.props.questions.filter(item => item.id === id)[0];
@@ -121,10 +147,29 @@ class Questions extends Component {
         });
     }
   }
+  handleDeleteFilterTag(id) {
+    const newSelectedTags = this.state.selectedTags.filter(t => t.id !== id);
+    this.updateStateByFilter(newSelectedTags);
+  }
+  updateStateByFilter(newSelectedTags) {
+    const selectedTagsIds = newSelectedTags.map(t => t.id);
+    this.setState({
+      selectedTags: newSelectedTags,
+      questions: this.props.questions.filter((q) => {
+        let isPresent = true;
+        selectedTagsIds.forEach(tag => {
+          if (!(q.tags.map(t => t.id)).includes(tag)) {
+            isPresent = false;
+          }
+        });
+        return isPresent;
+      }),
+    });
+  }
 
   render() {
-    const { questions, tags } = this.props;
-    const { showModal, searchQuestions, questionToEdit } = this.state;
+    const { tags } = this.props;
+    const { showModal, searchQuestions, questionToEdit, selectedTags, questions } = this.state;
 
     return (
         <div>
@@ -151,6 +196,36 @@ class Questions extends Component {
                 isEng={this.state.isEng}
                 onClick={() => this.setState({ isEng: !this.state.isEng })}
             />
+
+            <Paper style={{ margin: '20px' }}>
+                <AutoComplete
+                    hintText="Filter by Tags e.g. AngularJS, jQuery, Git..."
+                    dataSource={tags}
+                    dataSourceConfig={dataSourceConfig}
+                    onUpdateInput={this.handleUpdateInput}
+                    fullWidth
+                    filter={AutoComplete.fuzzyFilter}
+                    onNewRequest={(chosenRequest, index) =>
+                        this.onNewItemAddedIntoFilter(chosenRequest, index)}
+                />
+                <div style={styles.wrapper}>
+                    Selected tags:
+                    {selectedTags.length > 0 &&
+                      selectedTags.map(tag => (
+                          <Chip
+                              key={tag.id}
+                              style={styles.chip}
+                              labelColor="#fff"
+                              labelStyle={{ fontSize: '12px' }}
+                              onRequestDelete={() => this.handleDeleteFilterTag(tag.id)}
+                          >
+                              {tag.tag}
+                          </Chip>
+                      ))
+                    }
+                </div>
+            </Paper>
+
             <QuestionList
                 data={questions}
                 remove={this.onDeleteQuestion}
@@ -202,8 +277,6 @@ class Questions extends Component {
                     questionToEdit={questionToEdit}
                 />
             </Drawer>
-
-
         </div>
     );
   }
