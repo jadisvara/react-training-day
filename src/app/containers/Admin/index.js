@@ -6,7 +6,7 @@ module.exports = {
         });
     },
     getChildRoutes(location, cb) {
-        require.ensure([], (require) => {
+        require.ensure([], require => {
             cb(null, [
               require('./Questions'),
               require('./Interviews'),

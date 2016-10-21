@@ -42,7 +42,7 @@ class SelectTagsMui extends Component {
                           key={tag.id}
                           label={tag.tag}
                           checked={tag.selected}
-                          onCheck={(e) => this.onChange(e, tag)}
+                          onCheck={e => this.onChange(e, tag)}
                       />
                   ))}
                   {this.props.createdTags.map(tag => (
@@ -50,7 +50,7 @@ class SelectTagsMui extends Component {
                           key={tag.id}
                           label={tag.tag}
                           checked={tag.selected}
-                          onCheck={(e) => this.onChange(e, tag)}
+                          onCheck={e => this.onChange(e, tag)}
                       />
                   ))}
               </GridList>

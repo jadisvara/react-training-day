@@ -141,7 +141,7 @@ class Questions extends Component {
     } else {
         this.setState({
             searchText: text,
-            searchQuestions: self.props.questions.filter((question) =>
+            searchQuestions: self.props.questions.filter(question =>
               question.eng_text.toLowerCase().includes(text)
               || question.rus_text.toLowerCase().includes(text)),
         });
@@ -155,7 +155,7 @@ class Questions extends Component {
     const selectedTagsIds = newSelectedTags.map(t => t.id);
     this.setState({
       selectedTags: newSelectedTags,
-      questions: this.props.questions.filter((q) => {
+      questions: this.props.questions.filter(q => {
         let isPresent = true;
         selectedTagsIds.forEach(tag => {
           if (!(q.tags.map(t => t.id)).includes(tag)) {
@@ -268,7 +268,7 @@ class Questions extends Component {
                 openSecondary
                 open={this.state.openRightNav}
                 docked={false}
-                onRequestChange={(openRightNav) => this.onRightNavStateChange(openRightNav)}
+                onRequestChange={openRightNav => this.onRightNavStateChange(openRightNav)}
             >
                 <AddQuestionMui
                     tags={tags}
@@ -301,8 +301,8 @@ module.exports = connect(
   }),
   dispatch => ({
     getQuestions: () => dispatch(QuestionsActions.getQuestions()),
-    removeQuestion: (id) => dispatch(QuestionsActions.removeQuestion(id)),
-    getQuestion: (id) => dispatch(QuestionsActions.getQuestion(id)),
+    removeQuestion: id => dispatch(QuestionsActions.removeQuestion(id)),
+    getQuestion: id => dispatch(QuestionsActions.getQuestion(id)),
     updateQuestion: (data, callback) => dispatch(QuestionsActions.updateQuestion(data, callback)),
     saveQuestion: (data, callback) => dispatch(QuestionsActions.saveQuestion(data, callback)),
 

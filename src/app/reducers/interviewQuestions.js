@@ -15,7 +15,7 @@ const InterviewQuestionsReducer = (state = INITIAL_STATE,
         case ActionTypes.REMOVE_INTERVIEW_QUESTION:
             return {
               ...state,
-              interviewQuestions: state.interviewQuestions.filter((i) =>
+              interviewQuestions: state.interviewQuestions.filter(i =>
                 i.id !== action.payload.questionId),
             };
         case ActionTypes.SAVE_INTERVIEW_QUESTIONS:
@@ -29,7 +29,7 @@ const InterviewQuestionsReducer = (state = INITIAL_STATE,
         case ActionTypes.GET_QUESTION_CHILDREN:
             return {
               ...state,
-              interviewQuestions: state.interviewQuestions.map((i) => {
+              interviewQuestions: state.interviewQuestions.map(i => {
                 if (i.id === action.payload.questionId) {
                   // Copy the object before mutating
                   return Object.assign({}, i, { children: action.payload.data });

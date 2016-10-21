@@ -58,10 +58,10 @@ module.exports = connect(
     interviewQuestions: state.interviewQuestionsState.interviewQuestions,
   }),
   dispatch => ({
-    removeInterview: (id) => dispatch(InterviewsActions.removeInterview(id)),
-    getInterview: (id) => dispatch(InterviewsActions.getInterview(id)),
+    removeInterview: id => dispatch(InterviewsActions.removeInterview(id)),
+    getInterview: id => dispatch(InterviewsActions.getInterview(id)),
     updateInterview: (data, callback) =>
         dispatch(InterviewsActions.updateInterview(data, callback)),
-    getInterviewQuestions: (id) => dispatch(InterviewQuestionsActions.getInterviewQuestions(id)),
+    getInterviewQuestions: id => dispatch(InterviewQuestionsActions.getInterviewQuestions(id)),
   })
 )(InterviewDetail);

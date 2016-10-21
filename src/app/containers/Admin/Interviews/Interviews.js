@@ -69,7 +69,7 @@ class Interviews extends Component {
               />
               {this.state.showAddInterviewFrom &&
                   <AddInterview
-                      add={(name) => this.onAddInterviewClick(name)}
+                      add={name => this.onAddInterviewClick(name)}
                       cancel={() => this.onCancelClick()}
                   />
               }
@@ -79,7 +79,7 @@ class Interviews extends Component {
                           key={interview.id}
                           interview={interview}
                           onDeleteClick={(e, id) => this.onDeleteClick(e, id)}
-                          onSaveClick={(data) => this.onUpdate(data)}
+                          onSaveClick={data => this.onUpdate(data)}
                       />
                   ))}
               </List>
@@ -102,9 +102,9 @@ module.exports = connect(
   }),
   dispatch => ({
     getInterviews: () => dispatch(InterviewsActions.getInterviews()),
-    createInterview: (data) => dispatch(InterviewsActions.saveInterview(data)),
-    removeInterview: (id) => dispatch(InterviewsActions.removeInterview(id)),
-    getInterview: (id) => dispatch(InterviewsActions.getInterview(id)),
+    createInterview: data => dispatch(InterviewsActions.saveInterview(data)),
+    removeInterview: id => dispatch(InterviewsActions.removeInterview(id)),
+    getInterview: id => dispatch(InterviewsActions.getInterview(id)),
     updateInterview: (data, callback) =>
         dispatch(InterviewsActions.updateInterview(data, callback)),
   })

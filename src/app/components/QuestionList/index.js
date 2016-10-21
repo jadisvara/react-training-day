@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react';
 import { List } from 'material-ui/List';
 import Question from '../Question';
 
+// деструктуризация в параметрах
 const QuestionList = ({ data, remove, update, deleteTag, isEng }) => (
     <List style={{ padding: '10px' }}>
         {data.map(question => (

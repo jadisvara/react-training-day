@@ -36,7 +36,7 @@ class AddQuestionMui extends Component {
       const preselectedTags = question ? question.tags.map(t => t.tag) : [];
       // set tags
       const localTags = newProps.tags.concat();
-      localTags.forEach((t) => { t.selected = preselectedTags.includes(t.tag); });
+      localTags.forEach(t => { t.selected = preselectedTags.includes(t.tag); });
 
       this.setState({
         tags: localTags,

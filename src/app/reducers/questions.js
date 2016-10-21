@@ -41,12 +41,12 @@ const QuestionsReducer = (state = INITIAL_STATE,
         case ActionTypes.REMOVE_QUESTION:
             return {
               ...state,
-              questions: (state.questions.filter((question) => question.id !== action.payload)),
+              questions: (state.questions.filter(question => question.id !== action.payload)),
             };
         case ActionTypes.UPDATE_QUESTION:
             return {
               ...state,
-              questions: state.questions.map((q) => {
+              questions: state.questions.map(q => {
                 if (q.id === action.payload.id) {
                   // Copy the object before mutating
                   return Object.assign({}, q, action.payload);
@@ -58,7 +58,7 @@ const QuestionsReducer = (state = INITIAL_STATE,
         return {
           ...state,
           searchQuestions: (
-            state.questions.filter((question) =>
+            state.questions.filter(question =>
               question.eng_text.includes(action.payload)
               || question.rus_text.includes(action.payload))
           ),

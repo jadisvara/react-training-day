@@ -16,12 +16,12 @@ const InterviewsReducer = (state = INITIAL_STATE,
         case ActionTypes.REMOVE_INTERVIEW:
             return {
               ...state,
-              interviews: state.interviews.filter((i) => i.id !== action.payload),
+              interviews: state.interviews.filter(i => i.id !== action.payload),
             };
         case ActionTypes.UPDATE_INTERVIEW:
             return {
               ...state,
-              questions: state.interviews.map((i) => {
+              questions: state.interviews.map(i => {
                 if (i.id === action.payload.id) {
                   // Copy the object before mutating
                   return Object.assign({}, i, action.payload);

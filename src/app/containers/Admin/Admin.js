@@ -44,7 +44,7 @@ class Admin extends Component {
                 <Drawer
                     open={this.state.openLeftNav}
                     docked={false}
-                    onRequestChange={(openLeftNav) => this.setState({ openLeftNav })}
+                    onRequestChange={openLeftNav => this.setState({ openLeftNav })}
                 >
                     <div>
                         <List>

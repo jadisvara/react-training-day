@@ -52,7 +52,7 @@ class InterviewItem extends Component {
                   fullWidth
                   name={interview.name}
                   value={this.state.name}
-                  onChange={(e) => this.onNameChange(e)}
+                  onChange={e => this.onNameChange(e)}
               />
               {!this.state.showSaveCancelBtn &&
                   <FlatButton
