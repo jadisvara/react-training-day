@@ -8,7 +8,6 @@ import {
 } from '../resources/interviews';
 
 export const getInterviews = () => dispatch => {
-  console.log('getInterviews');
     interviewListApi().then(response => {
       dispatch({
           type: ActionType.SET_INTERVIEWS,
@@ -16,7 +15,7 @@ export const getInterviews = () => dispatch => {
       });
     });
 };
-export const removeInterview = (id) => dispatch => {
+export const removeInterview = id => dispatch => {
     removeInterviewApi(id).then(() => {
       dispatch({
           type: ActionType.REMOVE_INTERVIEW,
@@ -24,7 +23,7 @@ export const removeInterview = (id) => dispatch => {
       });
     });
 };
-export const saveInterview = (data) => dispatch => {
+export const saveInterview = data => dispatch => {
     saveInterviewApi(data).then(response => {
       dispatch({
           type: ActionType.SAVE_INTERVIEW,
@@ -43,7 +42,7 @@ export const updateInterview = (data, callback) => dispatch => {
       }
     });
 };
-export const getInterview = (id) => dispatch => {
+export const getInterview = id => dispatch => {
     interviewByIdApi(id).then(response => {
       dispatch({
           type: ActionType.GET_INTERVIEW,

@@ -6,8 +6,7 @@ import {
   getQuestionChildren as getQuestionChildrenApi,
 } from '../resources/interviewQuestions';
 
-export const getInterviewQuestions = (id) => dispatch => {
-    console.log('getInterviewQuestions');
+export const getInterviewQuestions = id => dispatch => {
     getInterviewQuestionsApi(id).then(response => {
       dispatch({
           type: ActionType.GET_INTERVIEW_QUESTIONS,
@@ -15,7 +14,7 @@ export const getInterviewQuestions = (id) => dispatch => {
       });
     });
 };
-export const saveInterviewQuestions = (data) => dispatch => {
+export const saveInterviewQuestions = data => dispatch => {
     saveInterviewQuestionsApi(data).then(response => {
       dispatch({
           type: ActionType.SAVE_INTERVIEW_QUESTIONS,

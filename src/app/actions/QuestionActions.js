@@ -15,7 +15,7 @@ export const getQuestions = () => dispatch => {
       });
     });
 };
-export const getQuestion = (id) => dispatch => {
+export const getQuestion = id => dispatch => {
     questionByIdApi(id).then(response => {
       dispatch({
           type: ActionType.SET_QUESTIONS,
@@ -45,7 +45,7 @@ export const updateQuestion = (data, callback) => dispatch => {
       }
     });
 };
-export const removeQuestion = (id) => dispatch => {
+export const removeQuestion = id => dispatch => {
     removeQuestionApi(id).then(() => {
       dispatch({
           type: ActionType.REMOVE_QUESTION,
