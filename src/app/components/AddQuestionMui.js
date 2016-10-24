@@ -5,7 +5,7 @@ import Subheader from 'material-ui/Subheader';
 import RaisedButton from 'material-ui/RaisedButton';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
-import SelectTagsMui from '../SelectTagsMui';
+import { SelectTagsMui } from '../components';
 
 class AddQuestionMui extends Component {
     constructor(props) {

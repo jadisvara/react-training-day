@@ -74,5 +74,4 @@ SelectTagsMui.propTypes = {
   createdTags: PropTypes.array.isRequired,
   select: PropTypes.func.isRequired,
 };
-
 module.exports = SelectTagsMui;

@@ -3,9 +3,7 @@ import { connect } from 'react-redux';
 import { List } from 'material-ui/List';
 
 import * as InterviewsActions from '../../../actions/InterviewActions';
-import InterviewItem from '../../../components/InterviewItem';
-import AddBtn from '../../../components/AddBtn';
-import AddInterview from '../../../components/AddInterview';
+import { AddBtn, AddInterview, InterviewItem } from '../../../components';
 
 class Interviews extends Component {
     constructor(props) {

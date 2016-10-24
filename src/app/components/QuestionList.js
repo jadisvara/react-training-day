@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { List } from 'material-ui/List';
-import Question from '../Question';
+import Question from './Question';
 
 // деструктуризация в параметрах
 const QuestionList = ({ data, remove, update, deleteTag, isEng }) => (

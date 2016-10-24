@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { connect } from 'react-redux';
 import TextField from 'material-ui/TextField';
-import Question from '../../../components/Question';
+import { Question } from '../../../components';
 
 import * as InterviewsActions from '../../../actions/InterviewActions';
 import * as InterviewQuestionsActions from '../../../actions/InterviewQuestionsActions';

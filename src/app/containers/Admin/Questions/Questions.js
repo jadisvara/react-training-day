@@ -12,11 +12,8 @@ import { cyan500 } from 'material-ui/styles/colors';
 
 import { FormGroup } from 'react-bootstrap';
 
-import QuestionList from '../../../components/QuestionList';
-import AddQuestion from '../../../components/AddQuestion';
-import AddBtn from '../../../components/AddBtn';
-import AddQuestionMui from '../../../components/AddQuestionMui';
-import LangSwitcher from '../../../components/LangSwitcher';
+import { AddBtn, LangSwitcher, AddQuestionMui, QuestionList } from '../../../components';
+
 import * as QuestionsActions from '../../../actions/QuestionActions';
 import * as TagActions from '../../../actions/TagActions';
 import * as CommonActions from '../../../actions/CommonActions';
@@ -251,7 +248,7 @@ class Questions extends Component {
                 open={showModal}
                 onRequestClose={this.closeAddQuestionModal}
             >
-                <AddQuestion
+                <AddQuestionMui
                     tags={tags}
                     save={this.saveQuestion}
                     update={this.updateQuestion}
