@@ -1,14 +1,10 @@
 import ActionType from '../constants/ActionTypes';
 
-export function showConfirmDialog(body, actions) {
-  return {
+export const showConfirmDialog = (body, actions) => ({
       type: ActionType.SHOW_CONFIRM_DIALOG,
       payload: { body, actions },
-  };
-}
+  });
 
-export function closeConfirmDialog() {
-  return {
+export const closeConfirmDialog = () => ({
       type: ActionType.CLOSE_CONFIRM_DIALOG,
-  };
-}
+});

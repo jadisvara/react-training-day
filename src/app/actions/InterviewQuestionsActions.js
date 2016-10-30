@@ -22,7 +22,7 @@ export const saveInterviewQuestions = data => dispatch => {
       });
     });
 };
-export const removeInterviewQuestion = (interviewId, questionId) => dispatch => {
+export const removeInterviewQuestion = ({ interviewId, questionId }) => dispatch => {
     removeInterviewQuestionApi(interviewId, questionId).then(() => {
       dispatch({
           type: ActionType.REMOVE_INTERVIEW_QUESTION,
@@ -33,7 +33,7 @@ export const removeInterviewQuestion = (interviewId, questionId) => dispatch => 
       });
     });
 };
-export const getQuestionChildren = (interviewId, questionId) => dispatch => {
+export const getQuestionChildren = ({ interviewId, questionId }) => dispatch => {
     getQuestionChildrenApi(interviewId, questionId).then(response => {
       dispatch({
           type: ActionType.GET_QUESTION_CHILDREN,

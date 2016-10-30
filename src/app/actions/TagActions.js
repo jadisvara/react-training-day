@@ -12,14 +12,10 @@ export const getTags = () => dispatch => {
       });
     });
 };
-export const saveTag = (tag, callback) => dispatch => {
-    saveTagApi(tag).then(response => {
-      dispatch({
-          type: ActionType.SAVE_TAG,
-          payload: response.data,
-      });
-      if (callback) {
-        callback();
-      }
+export const saveTag = tag => dispatch =>
+  saveTagApi(tag).then(response => {
+    dispatch({
+        type: ActionType.SAVE_TAG,
+        payload: response.data,
     });
-};
+  });

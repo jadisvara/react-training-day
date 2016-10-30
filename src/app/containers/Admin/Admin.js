@@ -13,6 +13,7 @@ import * as CommonActions from '../../actions/CommonActions';
 class Admin extends Component {
     constructor(props) {
       super(props);
+      this.toggleLeftNav = this.toggleLeftNav.bind(this);
       this.state = {
         openLeftNav: false,
       };
@@ -21,23 +22,21 @@ class Admin extends Component {
         console.log('Admin mounted!');
     }
     toggleLeftNav() {
-        this.setState({ openLeftNav: !this.state.openLeftNav });
+        this.setState(prevState => ({
+          openLeftNav: !prevState.openLeftNav,
+        }));
     }
 
     render() {
         return (
             <div>
                 <AppBar
-                    title={
-                        <span>Admin</span>
-                    }
+                    title={<span>Admin</span>}
                     onLeftIconButtonTouchTap={() => this.toggleLeftNav()}
                 />
                 <Paper>
                     <div>
-                    { this.props.children ||
-                        <Panel>This is Admins home.</Panel>
-                    }
+                    { this.props.children || <Panel>This is Admins home.</Panel> }
                     </div>
                 </Paper>
 

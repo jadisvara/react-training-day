@@ -34,7 +34,7 @@ class Interviews extends Component {
         this.props.removeInterview(id);
     }
     onUpdate(data) {
-        this.props.updateInterview(data, this.props.getInterviews);
+        this.props.updateInterview(data).then(() => { this.props.getInterviews(); });
     }
     onNameChangeNew(e, id) {
       console.log('onNameChangeNew', e, id);
@@ -55,15 +55,13 @@ class Interviews extends Component {
     }
 
     render() {
-      // onClick={ ()=> this.setState({ showAddInterviewFrom: !this.state.showAddInterviewFrom })}
-      // const { interviews } = this.props;
       return (
           <div>
               <AddBtn
                   onClick={() =>
-                    this.setState({
-                      showAddInterviewFrom: !this.state.showAddInterviewFrom,
-                    })}
+                    this.setState(prevState => ({
+                      showAddInterviewFrom: !prevState.showAddInterviewFrom,
+                    }))}
               />
               {this.state.showAddInterviewFrom &&
                   <AddInterview
@@ -103,7 +101,6 @@ module.exports = connect(
     createInterview: data => dispatch(InterviewsActions.saveInterview(data)),
     removeInterview: id => dispatch(InterviewsActions.removeInterview(id)),
     getInterview: id => dispatch(InterviewsActions.getInterview(id)),
-    updateInterview: (data, callback) =>
-        dispatch(InterviewsActions.updateInterview(data, callback)),
+    updateInterview: data => dispatch(InterviewsActions.updateInterview(data)),
   })
 )(Interviews);

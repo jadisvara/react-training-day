@@ -23,28 +23,20 @@ export const getQuestion = id => dispatch => {
       });
     });
 };
-export const saveQuestion = (data, callback) => dispatch => {
+export const saveQuestion = data => dispatch =>
     saveQuestionApi(data).then(response => {
       dispatch({
           type: ActionType.SAVE_QUESTION,
           payload: response.data,
       });
-      if (callback) {
-        callback();
-      }
     });
-};
-export const updateQuestion = (data, callback) => dispatch => {
-    updateQuestionApi(data).then(response => {
+export const updateQuestion = data => dispatch =>
+  updateQuestionApi(data).then(response => {
       dispatch({
           type: ActionType.UPDATE_QUESTION,
           payload: response.data,
       });
-      if (callback) {
-        callback();
-      }
-    });
-};
+  });
 export const removeQuestion = id => dispatch => {
     removeQuestionApi(id).then(() => {
       dispatch({

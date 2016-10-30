@@ -11,12 +11,6 @@ class AddQuestionMui extends Component {
     constructor(props) {
        super(props);
 
-       this.handleEngTextChange = this.handleEngTextChange.bind(this);
-       this.handleRuTextChange = this.handleRuTextChange.bind(this);
-       this.add = this.add.bind(this);
-       this.update = this.update.bind(this);
-       this.selectTag = this.selectTag.bind(this);
-
        const question = this.props.questionToEdit || null;
        this.state = {
          tags: [],
@@ -24,6 +18,66 @@ class AddQuestionMui extends Component {
          engText: question ? question.eng_text : '',
          ruText: question ? question.rus_text : '',
          selectedLevel: 1,
+       };
+
+       this.handleEngTextChange = e => this.setState({ engText: e.target.value });
+       this.handleRuTextChange = e => this.setState({ ruText: e.target.value });
+       this.handleLevelChange = (e, index, value) => this.setState({ selectedLevel: value });
+       this.add = () => {
+         if (this.state.engText.length > 0) {
+           const selectedTags = this.state.createdTags.filter(t => t.selected)
+               .concat(this.state.tags.filter(t => t.selected));
+
+           this.props.save({
+               eng_text: this.state.engText,
+               rus_text: this.state.ruText,
+               tags: selectedTags.map(t => t.tag),
+             });
+           }
+       };
+       this.update = () => {
+         if (this.state.engText.length > 0) {
+           const selectedTags = this.state.createdTags.filter(t => t.selected)
+               .concat(this.state.tags.filter(t => t.selected));
+
+           this.props.update({
+               id: this.props.questionToEdit.id,
+               eng_text: this.state.engText,
+               rus_text: this.state.ruText,
+               tags: selectedTags.map(t => t.tag),
+             });
+           }
+       };
+       this.selectTag = ({ tag, isAdded, isNew }) => {
+         if (isNew) {
+           const newCreatedTags = this.state.createdTags.slice();
+           const index = newCreatedTags.findIndex(t => t.tag === tag);
+           if (index !== -1) {
+             newCreatedTags[index].selected = isAdded;
+             this.setState({
+                 createdTags: newCreatedTags,
+             });
+           } else {
+             // TODO: and new tag to the list
+             // fake tag object
+             const tagObject = {
+                 id: this.state.tags.length + this.state.createdTags.length + 1,
+                 tag,
+                 selected: isAdded,
+                 isNew: true,
+             };
+             this.setState(prevState => ({
+                 createdTags: prevState.createdTags.concat(tagObject),
+             }));
+           }
+         } else {
+           const newTags = this.state.tags.slice();
+           const selectedTag = newTags.find(t => t.tag === tag);
+           selectedTag.selected = isAdded;
+           this.setState({
+               tags: newTags,
+           });
+         }
        };
     }
     componentWillMount() {
@@ -52,76 +106,9 @@ class AddQuestionMui extends Component {
         else if (length >= 0) return 'error';
         return 'error';
     }
-    handleEngTextChange(e) {
-        this.setState({ engText: e.target.value });
-    }
-    handleRuTextChange(e) {
-        this.setState({ ruText: e.target.value });
-    }
-    add() {
-        if (this.state.engText.length > 0) {
-          const selectedTags = this.state.createdTags.filter(t => t.selected)
-              .concat(this.state.tags.filter(t => t.selected));
 
-          this.props.save({
-              eng_text: this.state.engText,
-              rus_text: this.state.ruText,
-              tags: selectedTags.map(t => t.tag),
-            });
-          }
-    }
-    update() {
-        if (this.state.engText.length > 0) {
-          const selectedTags = this.state.createdTags.filter(t => t.selected)
-              .concat(this.state.tags.filter(t => t.selected));
-
-          this.props.update({
-              id: this.props.questionToEdit.id,
-              eng_text: this.state.engText,
-              rus_text: this.state.ruText,
-              tags: selectedTags.map(t => t.tag),
-            });
-          }
-    }
-    selectTag(tag, isAdded, isNew) {
-      console.log('addQuestion tag, isAdded', tag, isAdded);
-      if (isNew) {
-        const newCreatedTags = this.state.createdTags.slice();
-        const index = newCreatedTags.findIndex(t => t.tag === tag);
-        if (index !== -1) {
-          newCreatedTags[index].selected = isAdded;
-          this.setState({
-              createdTags: newCreatedTags,
-          });
-        } else {
-          // TODO: and new tag to the list
-          // fake tag object
-          const tagObject = {
-              id: this.state.tags.length + this.state.createdTags.length + 1,
-              tag,
-              selected: isAdded,
-              isNew: true,
-          };
-          this.setState({
-              createdTags: this.state.createdTags.concat(tagObject),
-          });
-        }
-      } else {
-        const newTags = this.state.tags.slice();
-        const selectedTag = newTags.find(t => t.tag === tag);
-        selectedTag.selected = isAdded;
-        this.setState({
-            tags: newTags,
-        });
-      }
-    }
-    handleLevelChange(e, index, value) {
-      this.setState({
-          selectedLevel: value,
-      });
-    }
     render() {
-      const question = this.props.questionToEdit || null;
+      // const question = this.props.questionToEdit || null;
 
       return (
           <div>
@@ -134,7 +121,6 @@ class AddQuestionMui extends Component {
                       rows={2}
                       fullWidth
                       onChange={this.handleEngTextChange}
-                      defaultValue={question ? question.eng_text : ''}
                       value={this.state.engText}
                   />
                   <TextField
@@ -144,13 +130,11 @@ class AddQuestionMui extends Component {
                       rows={2}
                       fullWidth
                       onChange={this.handleRuTextChange}
-                      defaultValue={question ? question.rus_text : ''}
                       value={this.state.ruText}
                   />
                   <DropDownMenu
                       value={this.state.selectedLevel}
-                      onChange={(e, index, value) =>
-                        this.handleLevelChange(e, index, value)}
+                      onChange={this.handleLevelChange}
                   >
                       <MenuItem value={1} primaryText="Theoretical" />
                       <MenuItem value={2} primaryText="Applied" />

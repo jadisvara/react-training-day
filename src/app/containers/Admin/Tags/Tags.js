@@ -22,6 +22,8 @@ const styles = {
 class Tags extends Component {
   constructor(props) {
     super(props);
+    this.handleTextChange = this.handleTextChange.bind(this);
+    this.addNewTag = this.addNewTag.bind(this);
     this.state = {
       newTagText: '',
     };
@@ -39,7 +41,7 @@ class Tags extends Component {
   addNewTag() {
       // TODO: add validation
       if (this.state.newTagText === '') return;
-      this.props.saveTag({ tag: this.state.newTagText }, this.props.getTags);
+      this.props.saveTag({ tag: this.state.newTagText }).then(() => { this.props.getTags(); });
   }
   handleTextChange(e) {
       this.setState({ newTagText: e.target.value });
@@ -53,13 +55,13 @@ class Tags extends Component {
             <TextField
                 hintText="You can enter a new tag here..."
                 floatingLabelText="New Tag"
-                onChange={e => this.handleTextChange(e)}
+                onChange={this.handleTextChange}
                 value={this.state.newTagText}
             />
             <FlatButton
                 label="Add"
                 primary
-                onClick={() => this.addNewTag()}
+                onClick={this.addNewTag}
             />
 
             <GridList
@@ -94,6 +96,6 @@ module.exports = connect(
   }),
   dispatch => ({
     getTags: () => dispatch(getTags()),
-    saveTag: (data, callback) => dispatch(saveTag(data, callback)),
+    saveTag: data => dispatch(saveTag(data)),
   })
 )(Tags);

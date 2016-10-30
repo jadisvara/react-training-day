@@ -21,13 +21,12 @@ class SelectTagsMui extends Component {
         });
     }
     onChange(e, tag) {
-        console.log('tag.isNew', tag.isNew);
-         this.props.select(tag.tag, e.target.checked, tag.isNew);
+         this.props.select({ tag: tag.tag, isAdded: e.target.checked, isNew: tag.isNew });
     }
     addNewTag() {
         // TODO: add validation
         if (this.state.newTagText === '') return;
-        this.props.select(this.state.newTagText, true, true);
+        this.props.select({ tag: this.state.newTagText, isAdded: true, isNew: true });
     }
     handleTextChange(e) {
         this.setState({ newTagText: e.target.value });

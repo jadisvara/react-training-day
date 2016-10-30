@@ -22,12 +22,6 @@ const styles = {
 };
 
 class Question extends Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        showBtns: false,
-      };
-    }
     componentWillMount() {
       console.log('Question');
     }
@@ -37,14 +31,7 @@ class Question extends Component {
     onEdit(e, id) {
         this.props.update(id);
     }
-    onMouseEnter() {
-        this.setState({ showBtns: true });
-    }
-    onMouseLeave() {
-        this.setState({ showBtns: false });
-    }
     handleDeleteTag(tagId, question) {
-      console.log('delete Tag', tagId);
       this.props.deleteTag(tagId, question);
     }
 
@@ -54,8 +41,6 @@ class Question extends Component {
       return (
           <ListItem
               // leftCheckbox={<Checkbox />}
-              onMouseEnter={() => this.onMouseEnter()}
-              onMouseLeave={() => this.onMouseLeave()}
               style={styles.listItem}
           >
               <div>

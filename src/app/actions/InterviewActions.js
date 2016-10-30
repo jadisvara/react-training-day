@@ -31,17 +31,13 @@ export const saveInterview = data => dispatch => {
       });
     });
 };
-export const updateInterview = (data, callback) => dispatch => {
-    updateInterviewApi(data).then(response => {
-      dispatch({
-          type: ActionType.UPDATE_INTERVIEW,
-          payload: response.data,
-      });
-      if (callback) {
-        callback();
-      }
+export const updateInterview = data => dispatch =>
+  updateInterviewApi(data).then(response => {
+    dispatch({
+        type: ActionType.UPDATE_INTERVIEW,
+        payload: response.data,
     });
-};
+  });
 export const getInterview = id => dispatch => {
     interviewByIdApi(id).then(response => {
       dispatch({

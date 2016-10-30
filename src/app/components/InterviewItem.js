@@ -7,6 +7,28 @@ import Link from 'react-router/lib/Link';
 class InterviewItem extends Component {
     constructor(props) {
         super(props);
+        this.onNameChange = e => this.setState({
+          name: e.target.value,
+          showSaveCancelBtn: true,
+        });
+        this.onDeleteClick = e => this.props.onDeleteClick(e, this.props.interview.id);
+        this.onEditClick = () => {};
+        this.onCancelClick = () => this.setState({
+          name: this.props.interview.name,
+          showSaveCancelBtn: false,
+        });
+        this.onSaveClick = () => {
+          // TODO: add validation
+          if (this.state.name === '') return;
+          this.props.onSaveClick({
+            id: this.props.interview.id,
+            name: this.state.name,
+          });
+          this.setState({
+            showSaveCancelBtn: false,
+          });
+        };
+
         this.state = {
           name: this.props.interview.name || '',
           showSaveCancelBtn: false,
@@ -14,32 +36,6 @@ class InterviewItem extends Component {
     }
     componentWillMount() {
       console.log('InterviewItem');
-    }
-    onSaveClick() {
-      // TODO: add validation
-      if (this.state.name === '') return;
-      this.props.onSaveClick({
-        id: this.props.interview.id,
-        name: this.state.name,
-      });
-      this.setState({
-        showSaveCancelBtn: false,
-      });
-    }
-    onCancelClick() {
-      this.setState({
-        name: this.props.interview.name,
-        showSaveCancelBtn: false,
-      });
-    }
-    onEditClick() {
-
-    }
-    onNameChange(e) {
-      this.setState({
-        name: e.target.value,
-        showSaveCancelBtn: true,
-      });
     }
 
     render() {
@@ -50,15 +46,15 @@ class InterviewItem extends Component {
               <TextField
                   style={{ width: '50%' }}
                   fullWidth
-                  name={interview.name}
+                  id={interview.id}
                   value={this.state.name}
-                  onChange={e => this.onNameChange(e)}
+                  onChange={this.onNameChange}
               />
               {!this.state.showSaveCancelBtn &&
                   <FlatButton
                       label="Delete"
                       style={{ float: 'right' }}
-                      onTouchTap={e => this.props.onDeleteClick(e, interview.id)}
+                      onTouchTap={this.onDeleteClick}
                   />
               }
               {!this.state.showSaveCancelBtn &&
@@ -68,7 +64,7 @@ class InterviewItem extends Component {
                       <FlatButton
                           label="Edit"
                           style={{ float: 'right' }}
-                          onTouchTap={() => this.onEditClick()}
+                          onTouchTap={this.onEditClick}
                       />
                   </Link>
               }
@@ -76,7 +72,7 @@ class InterviewItem extends Component {
                   <FlatButton
                       label="Cancel"
                       style={{ float: 'right' }}
-                      onTouchTap={() => this.onCancelClick()}
+                      onTouchTap={this.onCancelClick}
                   />
               }
               {this.state.showSaveCancelBtn &&
@@ -84,7 +80,7 @@ class InterviewItem extends Component {
                       primary
                       label="Save"
                       style={{ float: 'right' }}
-                      onTouchTap={() => this.onSaveClick()}
+                      onTouchTap={this.onSaveClick}
                   />
               }
           </ListItem>

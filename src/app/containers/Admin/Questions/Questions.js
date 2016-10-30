@@ -26,7 +26,7 @@ const styles = {
   wrapper: {
     display: 'inline-flex',
     flexWrap: 'wrap',
-    width: '30%',
+    width: '40%',
   },
 };
 
@@ -38,14 +38,64 @@ const dataSourceConfig = {
 class Questions extends Component {
   constructor(props) {
     super(props);
-    this.openAddQuestionModal = this.openAddQuestionModal.bind(this);
-    this.openEditQuestionModal = this.openEditQuestionModal.bind(this);
-    this.closeAddQuestionModal = this.closeAddQuestionModal.bind(this);
-    this.onDeleteQuestion = this.onDeleteQuestion.bind(this);
-    this.saveQuestion = this.saveQuestion.bind(this);
-    this.updateQuestion = this.updateQuestion.bind(this);
-    this.deleteTag = this.deleteTag.bind(this);
-    this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.openAddQuestionModal = () => this.setState({ openRightNav: true, questionToEdit: null });
+    this.openEditQuestionModal = id => {
+      const q = this.props.questions.filter(item => item.id === id)[0];
+      this.setState({
+          questionToEdit: q,
+          openRightNav: true,
+      });
+    };
+    this.closeAddQuestionModal = () => this.setState({ showModal: false, questionToEdit: null });
+    this.onDeleteQuestion = id => {
+      // TODO: add confirm dialog here
+       // this.props.removeQuestion(id);
+       const body = 'Delete this Question?';
+       const actions = [
+           <FlatButton
+               label="Cancel"
+               primary
+               onTouchTap={this.props.closeConfirmDialog}
+           />,
+           <FlatButton
+               label="Submit"
+               primary
+               onTouchTap={() => {
+                 this.props.closeConfirmDialog();
+                 this.props.removeQuestion(id);
+               }}
+           />,
+       ];
+       this.props.showConfirmDialog(body, actions);
+    };
+    this.saveQuestion = data => this.props.saveQuestion(data).then(() => { this.props.getTags(); });
+    this.updateQuestion = data => this.props.updateQuestion(data).then(() => {
+      this.props.getTags();
+    });
+    this.deleteTag = (tagId, questionData) => this.props.updateQuestion({
+        id: questionData.id,
+        eng_text: questionData.engText,
+        rus_text: questionData.ruText,
+        tags: questionData.tags.filter(t => t.id !== tagId).map(t => t.tag),
+    });
+    this.handleSearchChange = e => {
+      const self = this;
+      const text = e.target.value.trim().toLowerCase();
+      if (text === '') {
+          this.setState({
+              searchText: text,
+              searchQuestions: [],
+         });
+      } else {
+          this.setState({
+              searchText: text,
+              searchQuestions: self.props.questions.filter(question =>
+                question.eng_text.toLowerCase().includes(text)
+                || question.rus_text.toLowerCase().includes(text)),
+          });
+      }
+    };
+
     this.state = {
       showModal: false,
       searchText: '',
@@ -75,74 +125,9 @@ class Questions extends Component {
           this.setState({ questionToEdit: null });
       }
   }
-  onDeleteQuestion(id) {
-     // TODO: add confirm dialog here
-      // this.props.removeQuestion(id);
-      const body = 'Delete this Question?';
-      const actions = [
-          <FlatButton
-              label="Cancel"
-              primary
-              onTouchTap={this.props.closeConfirmDialog}
-          />,
-          <FlatButton
-              label="Submit"
-              primary
-              onTouchTap={() => {
-                this.props.closeConfirmDialog();
-                this.props.removeQuestion(id);
-              }}
-          />,
-      ];
-      this.props.showConfirmDialog(body, actions);
-  }
   onNewItemAddedIntoFilter(chosenRequest, index) {
       const newSelectedTags = [...this.state.selectedTags, this.props.tags[index]];
       this.updateStateByFilter(newSelectedTags);
-  }
-  openEditQuestionModal(id) {
-      const q = this.props.questions.filter(item => item.id === id)[0];
-      this.setState({
-          questionToEdit: q,
-          openRightNav: true,
-      });
-  }
-  openAddQuestionModal() {
-    this.setState({ openRightNav: true, questionToEdit: null });
-  }
-  closeAddQuestionModal() {
-    this.setState({ showModal: false, questionToEdit: null });
-  }
-  saveQuestion(data) {
-      this.props.saveQuestion(data, this.props.getTags);
-  }
-  updateQuestion(data) {
-      this.props.updateQuestion(data, this.props.getTags);
-  }
-  deleteTag(tagId, questionData) {
-    this.props.updateQuestion({
-        id: questionData.id,
-        eng_text: questionData.engText,
-        rus_text: questionData.ruText,
-        tags: questionData.tags.filter(t => t.id !== tagId).map(t => t.tag),
-      });
-  }
-  handleSearchChange(e) {
-    const self = this;
-    const text = e.target.value.trim().toLowerCase();
-    if (text === '') {
-        this.setState({
-            searchText: text,
-            searchQuestions: [],
-       });
-    } else {
-        this.setState({
-            searchText: text,
-            searchQuestions: self.props.questions.filter(question =>
-              question.eng_text.toLowerCase().includes(text)
-              || question.rus_text.toLowerCase().includes(text)),
-        });
-    }
   }
   handleDeleteFilterTag(id) {
     const newSelectedTags = this.state.selectedTags.filter(t => t.id !== id);
@@ -172,6 +157,7 @@ class Questions extends Component {
         <div>
             <AddBtn onClick={this.openAddQuestionModal} />
             <TextField
+                id="search-input"
                 hintText="Enter search words"
                 floatingLabelText="Search for"
                 value={this.state.searchText}
@@ -191,11 +177,12 @@ class Questions extends Component {
             </FormGroup>
             <LangSwitcher
                 isEng={this.state.isEng}
-                onClick={() => this.setState({ isEng: !this.state.isEng })}
+                onClick={() => this.setState(prevState => ({ isEng: !prevState.isEng }))}
             />
 
             <Paper style={{ margin: '20px' }}>
                 <AutoComplete
+                    id="filter-input"
                     hintText="Filter by Tags e.g. AngularJS, jQuery, Git..."
                     dataSource={tags}
                     dataSourceConfig={dataSourceConfig}
@@ -258,7 +245,9 @@ class Questions extends Component {
 
             <FlatButton
                 label="Toggle Drawer"
-                onTouchTap={() => this.setState({ openRightNav: !this.state.openRightNav })}
+                onTouchTap={() => this.setState(prevState => ({
+                  openRightNav: !prevState.openRightNav,
+                }))}
             />
             <Drawer
                 width={500}
@@ -300,8 +289,8 @@ module.exports = connect(
     getQuestions: () => dispatch(QuestionsActions.getQuestions()),
     removeQuestion: id => dispatch(QuestionsActions.removeQuestion(id)),
     getQuestion: id => dispatch(QuestionsActions.getQuestion(id)),
-    updateQuestion: (data, callback) => dispatch(QuestionsActions.updateQuestion(data, callback)),
-    saveQuestion: (data, callback) => dispatch(QuestionsActions.saveQuestion(data, callback)),
+    updateQuestion: data => dispatch(QuestionsActions.updateQuestion(data)),
+    saveQuestion: data => dispatch(QuestionsActions.saveQuestion(data)),
 
     getTags: () => dispatch(TagActions.getTags()),
 

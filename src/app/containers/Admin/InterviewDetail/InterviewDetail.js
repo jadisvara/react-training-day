@@ -8,7 +8,6 @@ import * as InterviewQuestionsActions from '../../../actions/InterviewQuestionsA
 
 class InterviewDetail extends Component {
     componentWillMount() {
-      console.log('this.props', this.props.params.id);
       this.props.getInterview(this.props.params.id);
       this.props.getInterviewQuestions(this.props.params.id);
     }
@@ -60,8 +59,12 @@ module.exports = connect(
   dispatch => ({
     removeInterview: id => dispatch(InterviewsActions.removeInterview(id)),
     getInterview: id => dispatch(InterviewsActions.getInterview(id)),
-    updateInterview: (data, callback) =>
-        dispatch(InterviewsActions.updateInterview(data, callback)),
+    updateInterview: data => dispatch(InterviewsActions.updateInterview(data)),
     getInterviewQuestions: id => dispatch(InterviewQuestionsActions.getInterviewQuestions(id)),
+    // data = {interviewId, questionId}
+    removeInterviewQuestion: data =>
+        dispatch(InterviewQuestionsActions.removeInterviewQuestion(data)),
+    getQuestionChildren: data =>
+        dispatch(InterviewQuestionsActions.getQuestionChildren(data)),
   })
 )(InterviewDetail);

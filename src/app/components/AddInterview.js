@@ -6,19 +6,14 @@ import { List, ListItem } from 'material-ui/List';
 class AddInterview extends Component {
     constructor(props) {
        super(props);
+       this.onNameChange = e => this.setState({ interviewName: e.target.value });
+       this.onAddClick = () => this.props.add(this.state.interviewName);
        this.state = {
          interviewName: '',
        };
     }
     componentWillMount() {
       console.log('AddInterview component');
-    }
-    onNameChange(e) {
-      this.setState({ interviewName: e.target.value });
-    }
-    onNameBlur(e, id) {
-      // TODO: Save interview name on blur
-        console.log('onNameBlur', e, id);
     }
     getValidationState() {
       // TODO: make it real
@@ -30,6 +25,7 @@ class AddInterview extends Component {
     }
 
     render() {
+      console.log('render AddInterview');
       return (
           <div>
               <List style={{ padding: '10px' }}>
@@ -39,20 +35,19 @@ class AddInterview extends Component {
                           hintText="Please enter an interview name..."
                           floatingLabelText="New Interview"
                           fullWidth
-                          onChange={e => this.onNameChange(e)}
-                          onBlur={() => this.props.add(this.state.interviewName)}
+                          onChange={this.onNameChange}
                           value={this.state.interviewName}
                       />
                       <RaisedButton
                           label="Cancel"
                           style={{ float: 'right' }}
-                          onTouchTap={() => this.props.cancel()}
+                          onTouchTap={this.props.cancel}
                       />
                       <RaisedButton
                           label="Add"
                           primary
                           style={{ float: 'right', marginRight: '10px' }}
-                          onTouchTap={() => this.props.add(this.state.interviewName)}
+                          onTouchTap={this.onAddClick}
                       />
                   </ListItem>
               </List>
